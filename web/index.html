@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NYC Policy Implementation Observatory</title><link rel="stylesheet" href="/style.css"></head>
+<body>
+<header><div class="brand"><span class="mark" aria-hidden="true">N<span>Y</span>C</span><div><h1>Policy Implementation Observatory</h1><p>New York City · October 2025–September 2026</p></div></div><a href="/api/dashboard" download="observatory-evidence.json" id="download">Download evidence</a></header>
+<nav aria-label="Dashboard pages"><button data-page="policy" aria-current="page">01 <span>Policy Responsiveness</span></button><button data-page="equity">02 <span>Neighborhood Equity</span></button><button data-page="priorities">03 <span>Operational Priorities</span></button></nav>
+<main>
+<div id="status" role="status">Loading source coverage…</div>
+<section class="controls" aria-label="Shared dashboard filters">
+<label>Study month<select id="month"><option value="">Full study year</option></select></label>
+<label>Borough<select id="borough"><option value="">All boroughs</option></select></label>
+<label>Agency<select id="agency"><option value="">All agencies</option></select></label>
+<label>Service<select id="service"><option value="">All services</option></select></label>
+<label>Community district<select id="district"><option value="">All districts</option></select></label>
+<label>Metric source<select id="backend"><option value="local">Local export</option><option value="cube">Cube REST</option></select></label>
+<button id="reset" class="quiet">Reset filters</button>
+</section>
+<div class="scope" id="scope"></div>
+<div id="content" aria-live="polite"></div>
+<details class="sources"><summary>Evidence, definitions & limitations</summary><div id="sources"></div></details>
+</main>
+<footer>NYC Policy Implementation Observatory <span>Descriptive evidence · No causal attribution</span></footer>
+<dialog id="detail"><button id="close" class="quiet">Close</button><div id="detail-content"></div></dialog>
+<script type="module" src="/app.js"></script>
+</body></html>

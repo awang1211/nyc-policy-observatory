@@ -1,0 +1,27 @@
+cubes:
+- name: PolicyServiceLinks
+  data_source: nyc_observatory
+  sql: SELECT * FROM nyc_observatory.policy_service_link
+  dimensions:
+  - name: row_key
+    sql: concat_ws('|',{CUBE}.policy_id,{CUBE}.agency,{CUBE}.service)
+    type: string
+    primary_key: true
+  - name: policy_id
+    sql: '{CUBE}.policy_id'
+    type: string
+  - name: agency
+    sql: '{CUBE}.agency'
+    type: string
+  - name: service
+    sql: '{CUBE}.service'
+    type: string
+  - name: rationale
+    sql: '{CUBE}.rationale'
+    type: string
+  - name: reviewer
+    sql: '{CUBE}.reviewer'
+    type: string
+  measures:
+  - name: row_count
+    type: count

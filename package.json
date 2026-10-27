@@ -1,0 +1,6 @@
+{
+  "name": "nyc-policy-observatory",
+  "private": true,
+  "type": "module",
+  "scripts": {"test": "node --test tests/dashboard.test.js"}
+}

@@ -1,0 +1,50 @@
+cubes:
+- name: Policies
+  data_source: nyc_observatory
+  sql: SELECT * FROM nyc_observatory.policy p WHERE EXISTS (SELECT 1 FROM nyc_observatory.policy_evidence
+    e WHERE e.policy_id=p.policy_id AND e.event_date>='2025-10-01' AND e.event_date<'2026-10-01')
+  dimensions:
+  - name: policy_id
+    sql: '{CUBE}.policy_id'
+    type: string
+    primary_key: true
+  - name: title
+    sql: '{CUBE}.title'
+    type: string
+  - name: domain
+    sql: '{CUBE}.domain'
+    type: string
+  - name: agency
+    sql: '{CUBE}.agency'
+    type: string
+  - name: announcement_date
+    sql: CAST({CUBE}.announcement_date AS timestamp)
+    type: time
+  - name: enactment_date
+    sql: CAST({CUBE}.enactment_date AS timestamp)
+    type: time
+  - name: implementation_date
+    sql: CAST({CUBE}.implementation_date AS timestamp)
+    type: time
+  - name: verified_status
+    sql: '{CUBE}.verified_status'
+    type: string
+  - name: evidence_date
+    sql: CAST({CUBE}.evidence_date AS timestamp)
+    type: time
+  - name: source_url
+    sql: '{CUBE}.source_url'
+    type: string
+  - name: evidence_quote
+    sql: '{CUBE}.evidence_quote'
+    type: string
+  - name: reviewer
+    sql: '{CUBE}.reviewer'
+    type: string
+  measures:
+  - name: row_count
+    type: count
+  - name: implementation_verified
+    type: count
+    filters:
+    - sql: '{CUBE}.verified_status = ''implementation_verified'''

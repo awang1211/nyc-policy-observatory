@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "checks": [
+    "Live empty-source page: policy",
+    "Live empty-source page: equity",
+    "Live empty-source page: priorities",
+    "Missing Cube binding produces explicit source error",
+    "390px mobile layout without horizontal overflow",
+    "Synthetic fixture: evidence drilldown opens and closes",
+    "Synthetic fixture: filters retain matched baseline and correct rate",
+    "Synthetic fixture: queue thresholds, drilldown and filtered export"
+  ],
+  "javascript_errors": [],
+  "qualification": "Browser software validation only; synthetic fixtures never persisted as research data."
+}

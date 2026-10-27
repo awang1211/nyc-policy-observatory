@@ -1,0 +1,33 @@
+cubes:
+- name: Socioeconomic
+  data_source: nyc_observatory
+  sql: SELECT * FROM nyc_observatory.socioeconomic
+  dimensions:
+  - name: row_key
+    sql: concat_ws('|',{CUBE}.vintage,{CUBE}.county_fips)
+    type: string
+    primary_key: true
+  - name: vintage
+    sql: '{CUBE}.vintage'
+    type: string
+  - name: county_fips
+    sql: '{CUBE}.county_fips'
+    type: string
+  - name: borough
+    sql: '{CUBE}.borough'
+    type: string
+  - name: population
+    sql: '{CUBE}.population'
+    type: number
+  - name: poverty_universe
+    sql: '{CUBE}.poverty_universe'
+    type: number
+  - name: poverty_count
+    sql: '{CUBE}.poverty_count'
+    type: number
+  - name: median_household_income
+    sql: '{CUBE}.median_household_income'
+    type: number
+  measures:
+  - name: row_count
+    type: count

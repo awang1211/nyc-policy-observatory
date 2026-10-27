@@ -1,0 +1,58 @@
+cubes:
+- name: ServiceMetrics
+  data_source: nyc_observatory
+  sql: SELECT * FROM nyc_observatory.service_metrics
+  dimensions:
+  - name: metric_id
+    sql: '{CUBE}.metric_id'
+    type: string
+    primary_key: true
+  - name: period
+    sql: '{CUBE}.period'
+    type: string
+  - name: month
+    sql: '{CUBE}.month'
+    type: string
+  - name: agency
+    sql: '{CUBE}.agency'
+    type: string
+  - name: service
+    sql: '{CUBE}.service'
+    type: string
+  - name: borough
+    sql: '{CUBE}.borough'
+    type: string
+  - name: community_district
+    sql: '{CUBE}.community_district'
+    type: string
+  measures:
+  - name: row_count
+    type: count
+  - name: requests
+    sql: '{CUBE}.requests'
+    type: sum
+  - name: eligible_30d
+    sql: '{CUBE}.eligible_30d'
+    type: sum
+  - name: closed_30d
+    sql: '{CUBE}.closed_30d'
+    type: sum
+  - name: unresolved_asof
+    sql: '{CUBE}.unresolved_asof'
+    type: sum
+  - name: invalid_closure
+    sql: '{CUBE}.invalid_closure'
+    type: sum
+  - name: closed_observed
+    sql: '{CUBE}.closed_observed'
+    type: sum
+  - name: closed_hours_sum
+    sql: '{CUBE}.closed_hours_sum'
+    type: sum
+  - name: closure_30d_rate
+    sql: '{closed_30d} * 1.0 / NULLIF({eligible_30d}, 0)'
+    type: number
+    format: percent
+  - name: mean_closed_hours
+    sql: '{closed_hours_sum} / NULLIF({closed_observed}, 0)'
+    type: number

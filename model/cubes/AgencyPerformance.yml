@@ -1,0 +1,39 @@
+cubes:
+- name: AgencyPerformance
+  data_source: nyc_observatory
+  sql: SELECT * FROM nyc_observatory.agency_performance
+  dimensions:
+  - name: row_key
+    sql: concat_ws('|',{CUBE}.indicator_id,{CUBE}.period_start,{CUBE}.period_end)
+    type: string
+    primary_key: true
+  - name: indicator_id
+    sql: '{CUBE}.indicator_id'
+    type: string
+  - name: agency
+    sql: '{CUBE}.agency'
+    type: string
+  - name: indicator
+    sql: '{CUBE}.indicator'
+    type: string
+  - name: period_start
+    sql: CAST({CUBE}.period_start AS timestamp)
+    type: time
+  - name: period_end
+    sql: CAST({CUBE}.period_end AS timestamp)
+    type: time
+  - name: value
+    sql: '{CUBE}.value'
+    type: number
+  - name: unit
+    sql: '{CUBE}.unit'
+    type: string
+  - name: direction
+    sql: '{CUBE}.direction'
+    type: string
+  - name: source_url
+    sql: '{CUBE}.source_url'
+    type: string
+  measures:
+  - name: row_count
+    type: count

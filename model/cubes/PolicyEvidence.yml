@@ -1,0 +1,30 @@
+cubes:
+- name: PolicyEvidence
+  data_source: nyc_observatory
+  sql: SELECT * FROM nyc_observatory.policy_evidence
+  dimensions:
+  - name: evidence_id
+    sql: '{CUBE}.evidence_id'
+    type: string
+    primary_key: true
+  - name: policy_id
+    sql: '{CUBE}.policy_id'
+    type: string
+  - name: evidence_type
+    sql: '{CUBE}.evidence_type'
+    type: string
+  - name: event_date
+    sql: CAST({CUBE}.event_date AS timestamp)
+    type: time
+  - name: source_url
+    sql: '{CUBE}.source_url'
+    type: string
+  - name: evidence_quote
+    sql: '{CUBE}.evidence_quote'
+    type: string
+  - name: reviewer
+    sql: '{CUBE}.reviewer'
+    type: string
+  measures:
+  - name: row_count
+    type: count

@@ -1,0 +1,20 @@
+{
+  "compiler_version": "1.8.14",
+  "compiled_models": [
+    "ServiceMetrics",
+    "Policies",
+    "PolicyEvidence",
+    "PolicyServiceLinks",
+    "Socioeconomic",
+    "AgencyPerformance"
+  ],
+  "generated_sql": {
+    "ServiceMetrics": "SELECT \"service_metrics\".borough \"service_metrics__borough\", sum(\"service_metrics\".closed_30d) * 1.0 / NULLIF(sum(\"service_metrics\".eligible_30d), 0) \"service_metrics__closure_30d_rate\" \nFROM  nyc_observatory.service_metrics  AS \"service_metrics\"\nGROUP BY 1\nORDER BY  2  DESC",
+    "Policies": "SELECT \"policies\".domain \"policies__domain\", count(\"policies\".policy_id) \"policies__row_count\" \nFROM  (SELECT * FROM nyc_observatory.policy p WHERE EXISTS (SELECT 1 FROM nyc_observatory.policy_evidence e WHERE e.policy_id=p.policy_id AND e.event_date>='2025-10-01' AND e.event_date<'2026-10-01'))  AS \"policies\"\nGROUP BY 1\nORDER BY  2  DESC",
+    "PolicyEvidence": "SELECT \"policy_evidence\".evidence_type \"policy_evidence__evidence_type\", count(\"policy_evidence\".evidence_id) \"policy_evidence__row_count\" \nFROM  nyc_observatory.policy_evidence  AS \"policy_evidence\"\nGROUP BY 1\nORDER BY  2  DESC",
+    "PolicyServiceLinks": "SELECT \"policy_service_links\".agency \"policy_service_links__agency\", count(concat_ws('|',\"policy_service_links\".policy_id,\"policy_service_links\".agency,\"policy_service_links\".service)) \"policy_service_links__row_count\" \nFROM  nyc_observatory.policy_service_link  AS \"policy_service_links\"\nGROUP BY 1\nORDER BY  2  DESC",
+    "Socioeconomic": "SELECT \"socioeconomic\".borough \"socioeconomic__borough\", count(concat_ws('|',\"socioeconomic\".vintage,\"socioeconomic\".county_fips)) \"socioeconomic__row_count\" \nFROM  nyc_observatory.socioeconomic  AS \"socioeconomic\"\nGROUP BY 1\nORDER BY  2  DESC",
+    "AgencyPerformance": "SELECT \"agency_performance\".agency \"agency_performance__agency\", count(concat_ws('|',\"agency_performance\".indicator_id,\"agency_performance\".period_start,\"agency_performance\".period_end)) \"agency_performance__row_count\" \nFROM  nyc_observatory.agency_performance  AS \"agency_performance\"\nGROUP BY 1\nORDER BY  2  DESC"
+  },
+  "qualification": "Local compilation/SQL generation only; no live Cube deployment or database execution."
+}

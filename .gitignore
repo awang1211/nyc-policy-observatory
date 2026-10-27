@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+node_modules/
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+reports/access.json
+reports/cube-inspection.json
+reports/dashboard.png
+*.sqlite*
+*.log

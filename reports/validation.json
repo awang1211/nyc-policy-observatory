@@ -1,0 +1,45 @@
+{
+  "passed": true,
+  "errors": [],
+  "independent_checks": [
+    {
+      "period": "baseline",
+      "request_grain_sql": {
+        "requests": 0,
+        "invalid": 0,
+        "eligible": 0,
+        "closed30": 0,
+        "unresolved": 0
+      },
+      "metric_table": {
+        "requests": 0,
+        "invalid": 0,
+        "eligible": 0,
+        "closed30": 0,
+        "unresolved": 0
+      },
+      "passed": true
+    },
+    {
+      "period": "study",
+      "request_grain_sql": {
+        "requests": 0,
+        "invalid": 0,
+        "eligible": 0,
+        "closed30": 0,
+        "unresolved": 0
+      },
+      "metric_table": {
+        "requests": 0,
+        "invalid": 0,
+        "eligible": 0,
+        "closed30": 0,
+        "unresolved": 0
+      },
+      "passed": true
+    }
+  ],
+  "request_rows": 0,
+  "data_validation_executed": false,
+  "qualification": "Empty data: structural checks only; no research results validated"
+}
