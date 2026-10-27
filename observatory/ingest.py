@@ -330,6 +330,17 @@ def discover_open_data_catalog(db):
                   'candidates': sorted(assets.values(), key=lambda x: ((x['name'] or '').casefold(), x['id']))}
         from .storage import write_json
         write_json(ROOT / 'reports/open-data-catalog.json', report)
+        # Surface a bounded, readable shortlist in GitHub's public run page so
+        # source selection can be reviewed without exposing credentials.
+        terms = ('american community survey', 'acs', 'poverty', 'income',
+                 'council', 'legislation', 'performance', 'indicator')
+        ranked = sorted(report['candidates'], key=lambda item: (
+            -sum(term in ((item.get('name') or '') + ' ' +
+                          (item.get('description') or '')).casefold() for term in terms),
+            (item.get('name') or '').casefold()))
+        for item in ranked[:10]:
+            title = ' '.join((item.get('name') or 'Untitled dataset').split())[:180]
+            print(f"::notice title=NYC Open Data {item['id']}::{title}")
         return len(assets), {'complete': True, 'queries': queries,
                              'report': 'reports/open-data-catalog.json'}
     return run_source(db, 'nyc_open_data_catalog', operation)
