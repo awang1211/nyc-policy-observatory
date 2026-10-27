@@ -48,7 +48,7 @@ Full 311 ingestion spans 24 months and may require millions of rows, significant
 
 Discovery creates candidates, never implementation claims. Broad source review and deduplication follow [methodology](docs/methodology.md). News seed URLs are provisional acquisition targets, not verified working endpoints. The bounded news crawler always records incomplete coverage.
 
-For an end-to-end connectivity check, the manually dispatched GitHub Actions workflow `Load smoke data` retrieves ACS plus one bounded 311/Council page and publishes only derived tables to Neon. It is intentionally partial and must never be described as the completed study. Store the direct Neon connection string in the repository Actions secret `DATABASE_URL`; never commit it.
+For an end-to-end connectivity check, the manually dispatched GitHub Actions workflow `Load smoke data` retrieves ACS plus one bounded 311/Council page and publishes only derived tables to Neon. It is intentionally partial and must never be described as the completed study. Store the direct Neon connection string in the repository Actions secret `NYC_DATABASE_URL`; the workflow maps it to the application's `DATABASE_URL` process variable. Never commit it.
 
 ## Cube deployment
 
