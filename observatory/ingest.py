@@ -367,6 +367,97 @@ def inspect_open_data_sources(db):
     write_json(ROOT / 'reports/open-data-schemas.json', schemas)
     return {'datasets': len(schemas), 'report': 'reports/open-data-schemas.json'}
 
+def ingest_selected_open_data(db):
+    """Load Council candidates and neighborhood agency indicators from official assets."""
+    results = {}
+
+    def council_operation():
+        dataset_id = '6ctv-n46c'
+        count = offset = 0
+        while True:
+            url = SOCRATA + '/resource/' + dataset_id + '.json?' + urlencode({
+                '$limit': 50000, '$offset': offset, '$order': 'matter_id'})
+            rows, artifact = fetch_json(db, url)
+            if not rows:
+                break
+            for row in rows:
+                dated = [(kind, (row.get(field) or '')[:10]) for kind, field in (
+                    ('enacted', 'enacted_date'), ('passed', 'passed_date'),
+                    ('introduced', 'intro_date'))]
+                event = next(((kind, day) for kind, day in dated
+                              if STUDY_START <= day < STUDY_END), None)
+                if not event:
+                    continue
+                title = row.get('title') or row.get('name') or row.get('file_num') or 'Council matter'
+                matter_id = str(row.get('matter_id') or row.get('file_num') or '').strip()
+                if not matter_id:
+                    continue
+                source_type = {'enacted': 'council_law_or_enactment_candidate',
+                               'passed': 'council_passage_candidate',
+                               'introduced': 'council_introduction_candidate'}[event[0]]
+                source_url = f'{SOCRATA}/d/{dataset_id}'
+                db.execute('INSERT OR REPLACE INTO policy_candidate '
+                           '(source_id,title,event_date,domain,source_url,source_type,artifact_id,disposition) '
+                           'VALUES (?,?,?,?,?,?,?,?)',
+                           ('nyc-open-data-council:' + matter_id, title, event[1], domain_for(title),
+                            source_url, source_type, artifact, 'unreviewed'))
+                count += 1
+            db.commit()
+            offset += len(rows)
+            if len(rows) < 50000:
+                break
+        return count, {'complete': True, 'dataset_id': dataset_id,
+                       'scope': 'study-year dated Council records; implementation review required'}
+
+    def performance_operation():
+        dataset_id = 'phxt-vb3r'
+        metadata, _ = fetch_json(db, SOCRATA + '/api/views/' + dataset_id + '.json')
+        fields = [c.get('fieldName') for c in metadata.get('columns', [])]
+        month_fields = [f for f in fields if f and re.fullmatch(
+            r'(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)_\d{2}', f)]
+        month_number = {name.lower(): number for number, name in enumerate(calendar.month_abbr) if name}
+        count = offset = 0
+        while True:
+            url = SOCRATA + '/resource/' + dataset_id + '.json?' + urlencode({
+                '$limit': 50000, '$offset': offset})
+            rows, artifact = fetch_json(db, url)
+            if not rows:
+                break
+            for row in rows:
+                agency = row.get('agency') or 'UNKNOWN'
+                geography = row.get('geographic_identifier') or 'CITYWIDE'
+                indicator = row.get('indicator') or 'Unnamed indicator'
+                for field in month_fields:
+                    mon, yy = field.split('_')
+                    year = 2000 + int(yy)
+                    month = month_number[mon]
+                    period_start = date(year, month, 1)
+                    if not (date.fromisoformat(BASELINE_START) <= period_start < date.fromisoformat(STUDY_END)):
+                        continue
+                    raw = str(row.get(field) or '').strip().replace(',', '').replace('%', '')
+                    try:
+                        value = float(raw)
+                    except ValueError:
+                        continue
+                    period_end = date(year + (month == 12), month % 12 + 1, 1)
+                    indicator_id = hashlib.sha256('|'.join((dataset_id, agency, geography, indicator)).encode()).hexdigest()
+                    source_url = f'{SOCRATA}/d/{dataset_id}'
+                    db.execute('INSERT OR REPLACE INTO agency_performance VALUES (?,?,?,?,?,?,?,?,?,?)',
+                               (indicator_id, agency, indicator + ' — ' + geography,
+                                period_start.isoformat(), period_end.isoformat(), value,
+                                'source value', 'context', source_url, artifact))
+                    count += 1
+            db.commit()
+            offset += len(rows)
+            if len(rows) < 50000:
+                break
+        return count, {'complete': count > 0, 'dataset_id': dataset_id,
+                       'reason': None if count else 'dataset has no values in the study window'}
+
+    results['council'] = run_source(db, 'nyc_open_data_council', council_operation)
+    results['agency_performance'] = run_source(db, 'nyc_open_data_agency_performance', performance_operation)
+    return results
+
 def official_url(url):
     parsed = urlparse(url)
     host = parsed.hostname or ''

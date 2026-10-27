@@ -10,7 +10,7 @@ from .http import SourceError
 def main():
     parser = argparse.ArgumentParser(description='NYC Policy Implementation Observatory')
     parser.add_argument('command', choices=['init','ingest-311','ingest-acs','discover-policies','discover-events',
-        'discover-news','discover-open-data','inspect-open-data',
+        'discover-news','discover-open-data','inspect-open-data','ingest-open-data',
         'import-policies','import-agency','import-links','export','validate','inspect-cube',
         'load-postgres','load-postgres-sources','serve'])
     parser.add_argument('--input')
@@ -43,6 +43,9 @@ def main():
         elif args.command == 'inspect-open-data':
             from .ingest import inspect_open_data_sources
             result = inspect_open_data_sources(db)
+        elif args.command == 'ingest-open-data':
+            from .ingest import ingest_selected_open_data
+            result = ingest_selected_open_data(db)
         elif args.command.startswith('import-'):
             if not args.input:
                 parser.error('--input CSV is required')

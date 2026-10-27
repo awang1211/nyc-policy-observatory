@@ -42,6 +42,9 @@ jobs:
       - name: Inspect selected official data fields
         id: open_data_schemas
         run: python -m observatory.cli inspect-open-data
+      - name: Load selected official Council and performance data
+        id: selected_open_data
+        run: python -m observatory.cli ingest-open-data
       - name: Discover official NYC agency publications
         id: agency_publications
         continue-on-error: true
@@ -65,6 +68,7 @@ jobs:
             echo "- ACS: ${{ steps.acs.outcome }}"
             echo "- NYC Open Data source search: ${{ steps.open_data_catalog.outcome }}"
             echo "- Selected official data fields: ${{ steps.open_data_schemas.outcome }}"
+            echo "- Selected Council and performance data: ${{ steps.selected_open_data.outcome }}"
             echo "- NYC agency publications: ${{ steps.agency_publications.outcome }}"
             echo "- Council introductions: ${{ steps.council_introductions.outcome }}"
             echo "- Council events: ${{ steps.council_events.outcome }}"

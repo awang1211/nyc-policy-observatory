@@ -104,7 +104,8 @@ def load_postgres_sources(db):
     destination = os.getenv('DATABASE_URL')
     if not destination:
         raise SourceError('DATABASE_URL is missing')
-    tables = ['source_artifact', 'ingestion_run', 'policy_candidate', 'socioeconomic']
+    tables = ['source_artifact', 'ingestion_run', 'policy_candidate',
+              'socioeconomic', 'agency_performance']
     with psycopg.connect(destination) as pg:
         pg.execute('CREATE SCHEMA IF NOT EXISTS nyc_observatory')
         for table in tables:
