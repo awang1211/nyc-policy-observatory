@@ -1,0 +1,97 @@
+name: Load production research data
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/load-production-data.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-research-data
+  cancel-in-progress: false
+
+jobs:
+  load-production-data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      DATABASE_URL: ${{ secrets.NYC_DATABASE_URL }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install project
+        run: python -m pip install -e '.[postgres]'
+
+      - name: Confirm database secret exists
+        run: |
+          if [ -z "$DATABASE_URL" ]; then
+            echo "::error::Repository secret NYC_DATABASE_URL is missing or empty."
+            exit 1
+          fi
+
+      - name: Initialize evidence database
+        run: python -m observatory.cli init
+
+      - name: Load official ACS borough context
+        id: acs
+        continue-on-error: true
+        run: python -m observatory.cli ingest-acs
+
+      - name: Load complete official 311 baseline and study periods
+        id: service_requests
+        run: python -m observatory.cli ingest-311
+
+      - name: Discover official Council introductions
+        id: council_introductions
+        continue-on-error: true
+        run: python -m observatory.cli discover-policies
+
+      - name: Discover official Council events
+        id: council_events
+        continue-on-error: true
+        run: python -m observatory.cli discover-events
+
+      - name: Build complete metric snapshot
+        run: python -m observatory.cli export --as-of 2026-10-27T18:20:00-04:00
+
+      - name: Validate calculations and provenance
+        run: python -m observatory.cli validate --as-of 2026-10-27T18:20:00-04:00
+
+      - name: Publish validated derived tables to Neon
+        run: python -m observatory.cli load-postgres
+
+      - name: Summarize production source coverage
+        if: always()
+        run: |
+          {
+            echo "## Production research data coverage"
+            echo ""
+            echo "- 311 baseline and study periods: ${{ steps.service_requests.outcome }}"
+            echo "- ACS borough context: ${{ steps.acs.outcome }}"
+            echo "- Council introductions: ${{ steps.council_introductions.outcome }}"
+            echo "- Council events: ${{ steps.council_events.outcome }}"
+            echo "- Period: 2024-10-01 through 2026-09-30"
+            echo "- The policy registry remains review-gated; discovered records are candidates, not verified implementation."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Preserve validation and aggregate outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-data-validation
+          path: |
+            reports/validation.json
+            data/processed/service_metrics.csv
+            data/processed/socioeconomic.csv
+          if-no-files-found: warn
+          retention-days: 30

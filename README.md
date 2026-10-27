@@ -54,6 +54,12 @@ For an end-to-end connectivity check, the manually dispatched GitHub Actions wor
 
 See [deployment and feature inspection](docs/cube-deployment.md). Securely configure an authorized `DATABASE_URL`; install `python3 -m pip install -e '.[postgres]'`; run `load-postgres`. This transactionally replaces only this project's derived tables in `nyc_observatory`; verify the destination first. Cube reads the six `model/cubes/*.yml` files from the repository root; preserve existing connections/models.
 
+The `Load production research data` GitHub Actions workflow retrieves the complete
+October 2024 through September 2026 311 baseline and study window, performs monthly
+source/database reconciliation, independently validates derived metrics, and then
+publishes the validated aggregate tables to Neon. ACS and Council discovery report
+their own outcomes and do not conceal or block the required 311 validation path.
+
 Configure the exact `CUBE_API_URL` and a query token as `CUBE_API_TOKEN`, run `inspect-cube`, restart the server, then select **Cube REST**. Tokens stay server-side. The server rejects Cube metric counts that do not reconcile to the local evidence export. Registry/provenance still comes from that export and is labeled accordingly. A query token does not grant Cloud management permissions.
 
 The local three-page application is separate from native Cube Dashboard objects. Native Workbooks/Dashboards require authenticated feature inspection and authoring; they have not been created.
