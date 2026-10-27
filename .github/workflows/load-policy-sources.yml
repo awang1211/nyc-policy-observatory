@@ -36,6 +36,9 @@ jobs:
         id: acs
         continue-on-error: true
         run: python -m observatory.cli ingest-acs
+      - name: Find accessible official NYC Open Data sources
+        id: open_data_catalog
+        run: python -m observatory.cli discover-open-data
       - name: Discover official NYC agency publications
         id: agency_publications
         continue-on-error: true
@@ -57,8 +60,17 @@ jobs:
             echo "## Official policy source coverage"
             echo ""
             echo "- ACS: ${{ steps.acs.outcome }}"
+            echo "- NYC Open Data source search: ${{ steps.open_data_catalog.outcome }}"
             echo "- NYC agency publications: ${{ steps.agency_publications.outcome }}"
             echo "- Council introductions: ${{ steps.council_introductions.outcome }}"
             echo "- Council events: ${{ steps.council_events.outcome }}"
             echo "- Discovered publications remain review candidates and are not implementation findings."
           } >> "$GITHUB_STEP_SUMMARY"
+      - name: Preserve accessible source catalog
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: official-open-data-catalog
+          path: reports/open-data-catalog.json
+          if-no-files-found: warn
+          retention-days: 30

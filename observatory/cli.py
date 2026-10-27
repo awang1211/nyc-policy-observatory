@@ -9,7 +9,8 @@ from .http import SourceError
 
 def main():
     parser = argparse.ArgumentParser(description='NYC Policy Implementation Observatory')
-    parser.add_argument('command', choices=['init','ingest-311','ingest-acs','discover-policies','discover-events','discover-news',
+    parser.add_argument('command', choices=['init','ingest-311','ingest-acs','discover-policies','discover-events',
+        'discover-news','discover-open-data',
         'import-policies','import-agency','import-links','export','validate','inspect-cube',
         'load-postgres','load-postgres-sources','serve'])
     parser.add_argument('--input')
@@ -36,6 +37,9 @@ def main():
         elif args.command == 'discover-news':
             from .ingest import discover_official_news
             result = discover_official_news(db,args.input or ROOT/'data/inputs/news_seeds.csv',args.max_pages or 200)
+        elif args.command == 'discover-open-data':
+            from .ingest import discover_open_data_catalog
+            result = discover_open_data_catalog(db)
         elif args.command.startswith('import-'):
             if not args.input:
                 parser.error('--input CSV is required')

@@ -293,6 +293,47 @@ def discover_official_news(db, seed_file, max_pages=200):
                        'failed_urls':failures,'scope':'bounded discovery; pagination and article-date coverage not exhaustive'}
     return run_source(db,'official_news_candidates',operation)
 
+def discover_open_data_catalog(db):
+    """Find official NYC Open Data assets that can replace blocked source sites."""
+    def operation():
+        queries = [
+            'American Community Survey borough poverty income',
+            'City Council legislation',
+            'Mayor policy initiatives',
+            'agency performance indicators',
+        ]
+        assets = {}
+        for query in queries:
+            params = urlencode({'search_context': 'data.cityofnewyork.us',
+                                'q': query, 'limit': 100})
+            try:
+                payload, _ = fetch_json(db, 'https://api.us.socrata.com/api/catalog/v1?' + params)
+            except SourceError:
+                payload, _ = fetch_json(db, 'https://data.cityofnewyork.us/api/catalog/v1?' + params)
+            for item in payload.get('results', []):
+                resource = item.get('resource', {})
+                dataset_id = resource.get('id')
+                if not dataset_id or resource.get('type') not in ('dataset', 'map', 'href'):
+                    continue
+                assets[dataset_id] = {
+                    'id': dataset_id,
+                    'name': resource.get('name'),
+                    'description': resource.get('description'),
+                    'updated_at': resource.get('updatedAt'),
+                    'permalink': item.get('permalink'),
+                    'publisher': item.get('classification', {}).get('domain_category'),
+                }
+        if not assets:
+            raise SourceError('NYC Open Data catalog returned no candidate datasets')
+        report = {'search_context': 'data.cityofnewyork.us',
+                  'candidate_count': len(assets),
+                  'candidates': sorted(assets.values(), key=lambda x: ((x['name'] or '').casefold(), x['id']))}
+        from .storage import write_json
+        write_json(ROOT / 'reports/open-data-catalog.json', report)
+        return len(assets), {'complete': True, 'queries': queries,
+                             'report': 'reports/open-data-catalog.json'}
+    return run_source(db, 'nyc_open_data_catalog', operation)
+
 def official_url(url):
     parsed = urlparse(url)
     host = parsed.hostname or ''
