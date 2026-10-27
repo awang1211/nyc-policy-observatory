@@ -39,6 +39,9 @@ jobs:
       - name: Find accessible official NYC Open Data sources
         id: open_data_catalog
         run: python -m observatory.cli discover-open-data
+      - name: Inspect selected official data fields
+        id: open_data_schemas
+        run: python -m observatory.cli inspect-open-data
       - name: Discover official NYC agency publications
         id: agency_publications
         continue-on-error: true
@@ -61,6 +64,7 @@ jobs:
             echo ""
             echo "- ACS: ${{ steps.acs.outcome }}"
             echo "- NYC Open Data source search: ${{ steps.open_data_catalog.outcome }}"
+            echo "- Selected official data fields: ${{ steps.open_data_schemas.outcome }}"
             echo "- NYC agency publications: ${{ steps.agency_publications.outcome }}"
             echo "- Council introductions: ${{ steps.council_introductions.outcome }}"
             echo "- Council events: ${{ steps.council_events.outcome }}"
@@ -71,6 +75,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: official-open-data-catalog
-          path: reports/open-data-catalog.json
+          path: |
+            reports/open-data-catalog.json
+            reports/open-data-schemas.json
           if-no-files-found: warn
           retention-days: 30

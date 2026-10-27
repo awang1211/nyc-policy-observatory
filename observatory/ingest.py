@@ -345,6 +345,28 @@ def discover_open_data_catalog(db):
                              'report': 'reports/open-data-catalog.json'}
     return run_source(db, 'nyc_open_data_catalog', operation)
 
+def inspect_open_data_sources(db):
+    """Archive and expose schemas for selected official NYC Open Data assets."""
+    selected = {
+        '6ctv-n46c': 'City Council legislation',
+        'gsj6-6rwm': 'Agency performance annual',
+        'phxt-vb3r': 'Agency performance monthly',
+        'xn3r-zk6y': 'Community district boundaries',
+    }
+    schemas = {}
+    for dataset_id, label in selected.items():
+        metadata, _ = fetch_json(db, f'{SOCRATA}/api/views/{dataset_id}.json')
+        fields = [column.get('fieldName') for column in metadata.get('columns', [])
+                  if column.get('fieldName')]
+        if not fields:
+            raise SourceError(f'Official dataset {dataset_id} has no machine-readable fields')
+        schemas[dataset_id] = {'label': label, 'name': metadata.get('name'), 'fields': fields}
+        safe_fields = ', '.join(fields[:35])
+        print(f'::notice title={dataset_id} {label}::{safe_fields}')
+    from .storage import write_json
+    write_json(ROOT / 'reports/open-data-schemas.json', schemas)
+    return {'datasets': len(schemas), 'report': 'reports/open-data-schemas.json'}
+
 def official_url(url):
     parsed = urlparse(url)
     host = parsed.hostname or ''
