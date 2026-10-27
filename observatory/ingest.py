@@ -340,7 +340,7 @@ def discover_open_data_catalog(db):
             (item.get('name') or '').casefold()))
         for item in ranked[:10]:
             title = ' '.join((item.get('name') or 'Untitled dataset').split())[:180]
-            print(f"::notice title=NYC Open Data {item['id']}::{title}")
+            print(f"::notice title=NYC Open Data candidate::{item['id']} — {title}")
         return len(assets), {'complete': True, 'queries': queries,
                              'report': 'reports/open-data-catalog.json'}
     return run_source(db, 'nyc_open_data_catalog', operation)
