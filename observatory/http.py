@@ -28,9 +28,15 @@ def fetch(url, headers=None, attempts=4):
 
 def fetch_json(db, url, headers=None):
     from .storage import archive
-    body, mime = fetch(url, headers)
+    # Some government endpoints perform content negotiation and may return an
+    # HTML landing page when broad Accept values are supplied.
+    strict_headers = {**(headers or {}), 'Accept': 'application/json'}
+    body, mime = fetch(url, strict_headers)
     try:
-        value = json.loads(body)
+        value = json.loads(body.decode('utf-8-sig'))
     except ValueError:
-        raise SourceError('Expected JSON; source returned another representation') from None
+        media_type = mime.split(';', 1)[0].strip() or 'unknown'
+        raise SourceError(
+            f'Expected JSON; source returned {media_type} ({len(body)} bytes)'
+        ) from None
     return value, archive(db, url, body, mime)

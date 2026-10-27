@@ -35,12 +35,16 @@ jobs:
         run: python -m observatory.cli init
 
       - name: Load official ACS borough context
+        id: acs
+        continue-on-error: true
         run: python -m observatory.cli ingest-acs
 
       - name: Load one bounded page of official 311 records
         run: python -m observatory.cli ingest-311 --max-pages 1
 
       - name: Discover bounded Council policy candidates
+        id: council
+        continue-on-error: true
         run: |
           python -m observatory.cli discover-policies --max-pages 1
           python -m observatory.cli discover-events --max-pages 1
@@ -53,6 +57,17 @@ jobs:
 
       - name: Publish derived smoke tables to Neon
         run: python -m observatory.cli load-postgres
+
+      - name: Summarize source coverage
+        if: always()
+        run: |
+          {
+            echo "## Smoke source coverage"
+            echo ""
+            echo "- ACS: ${{ steps.acs.outcome }}"
+            echo "- Council discovery: ${{ steps.council.outcome }}"
+            echo "- This workflow is deliberately partial and is not a completed study."
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Preserve validation evidence
         if: always()
