@@ -1,0 +1,60 @@
+name: Load smoke data
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  load-smoke-data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install project
+        run: python -m pip install -e '.[postgres]'
+
+      - name: Confirm database secret exists
+        run: test -n "$DATABASE_URL"
+
+      - name: Initialize local evidence database
+        run: python -m observatory.cli init
+
+      - name: Load official ACS borough context
+        run: python -m observatory.cli ingest-acs
+
+      - name: Load one bounded page of official 311 records
+        run: python -m observatory.cli ingest-311 --max-pages 1
+
+      - name: Discover bounded Council policy candidates
+        run: |
+          python -m observatory.cli discover-policies --max-pages 1
+          python -m observatory.cli discover-events --max-pages 1
+
+      - name: Build partial dashboard snapshot
+        run: python -m observatory.cli export --as-of 2026-10-27T00:00:00-04:00
+
+      - name: Validate calculations and provenance
+        run: python -m observatory.cli validate --as-of 2026-10-27T00:00:00-04:00
+
+      - name: Publish derived smoke tables to Neon
+        run: python -m observatory.cli load-postgres
+
+      - name: Preserve validation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-data-validation
+          path: reports/*.json
+          if-no-files-found: warn
+          retention-days: 14

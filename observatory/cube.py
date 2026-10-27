@@ -63,12 +63,16 @@ def load_postgres(db):
     if not destination:
         raise SourceError('DATABASE_URL is missing')
     # One transaction, isolated namespace, no changes to other schemas.
+    # Parent tables are copied before their dependents. Deletions happen in the
+    # reverse order so repeatable refreshes respect PostgreSQL foreign keys.
     tables = ['source_artifact','ingestion_run','service_metrics','policy','policy_evidence',
               'policy_service_link','socioeconomic','agency_performance']
     with psycopg.connect(destination) as pg:
         pg.execute('CREATE SCHEMA IF NOT EXISTS nyc_observatory')
+        table_columns = {}
         for table in tables:
             cols = list(db.execute(f'PRAGMA table_info({table})'))
+            table_columns[table] = cols
             definitions = []
             for c in cols:
                 typ = {'TEXT':'text','INTEGER':'bigint','REAL':'double precision'}[c['type']]
@@ -76,7 +80,12 @@ def load_postgres(db):
                 definitions.append(sql.SQL('{} {}').format(sql.Identifier(c['name']), sql.SQL(typ)))
             ident = sql.Identifier('nyc_observatory', table)
             pg.execute(sql.SQL('CREATE TABLE IF NOT EXISTS {} ({})').format(ident, sql.SQL(',').join(definitions)))
+        for table in reversed(tables):
+            ident = sql.Identifier('nyc_observatory', table)
             pg.execute(sql.SQL('DELETE FROM {}').format(ident))
+        for table in tables:
+            cols = table_columns[table]
+            ident = sql.Identifier('nyc_observatory', table)
             with pg.cursor().copy(sql.SQL('COPY {} ({}) FROM STDIN').format(ident, sql.SQL(',').join(
                     sql.Identifier(c['name']) for c in cols))) as copy:
                 for row in db.execute(f'SELECT * FROM {table}'):
