@@ -10,7 +10,7 @@ from datetime import date
 from html import unescape
 from html.parser import HTMLParser
 from urllib.parse import urlencode, urlparse, urljoin, urlunparse
-from .config import BASELINE_START, STUDY_END, STUDY_START, COUNTIES, domain_for
+from .config import ROOT, BASELINE_START, STUDY_END, STUDY_START, COUNTIES, domain_for
 from .http import fetch_json, fetch, SourceError
 from .storage import archive, now
 
