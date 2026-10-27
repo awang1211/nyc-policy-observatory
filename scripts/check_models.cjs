@@ -8,9 +8,9 @@ const root=path.resolve(__dirname,'../model/cubes');
  const compilers=await compile(repo,{standalone:true});
  const generated={};
  for(const [cube,measure,dimension] of [
-  ['ServiceMetrics','closure_30d_rate','borough'],['Policies','row_count','domain'],
-  ['PolicyEvidence','row_count','evidence_type'],['PolicyServiceLinks','row_count','agency'],
-  ['Socioeconomic','row_count','borough'],['AgencyPerformance','row_count','agency']]){
+  ['ServiceMetricsView','closure_30d_rate','borough'],['PoliciesView','row_count','domain'],
+  ['PolicyEvidenceView','row_count','evidence_type'],['PolicyServiceLinksView','row_count','agency'],
+  ['SocioeconomicView','row_count','borough'],['AgencyPerformanceView','row_count','agency']]){
   const query=compilers.createQuery(PostgresQuery,{measures:[`${cube}.${measure}`],dimensions:[`${cube}.${dimension}`],timezone:'America/New_York'});
   generated[cube]=query.buildSqlAndParams()[0];
  }

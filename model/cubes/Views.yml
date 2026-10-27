@@ -1,0 +1,102 @@
+views:
+  - name: ServiceMetricsView
+    description: Query-ready public view for neighborhood service demand and performance.
+    cubes:
+      - join_path: ServiceMetrics
+        includes:
+          - metric_id
+          - period
+          - month
+          - agency
+          - service
+          - borough
+          - community_district
+          - row_count
+          - requests
+          - eligible_30d
+          - closed_30d
+          - unresolved_asof
+          - invalid_closure
+          - closed_observed
+          - closed_hours_sum
+          - closure_30d_rate
+          - mean_closed_hours
+
+  - name: PoliciesView
+    description: Query-ready public view of reviewed policies with study-year evidence.
+    cubes:
+      - join_path: Policies
+        includes:
+          - policy_id
+          - title
+          - domain
+          - agency
+          - announcement_date
+          - enactment_date
+          - implementation_date
+          - verified_status
+          - evidence_date
+          - source_url
+          - evidence_quote
+          - reviewer
+          - row_count
+          - implementation_verified
+
+  - name: PolicyEvidenceView
+    description: Query-ready public view of dated policy evidence and citations.
+    cubes:
+      - join_path: PolicyEvidence
+        includes:
+          - evidence_id
+          - policy_id
+          - evidence_type
+          - event_date
+          - source_url
+          - evidence_quote
+          - reviewer
+          - row_count
+
+  - name: PolicyServiceLinksView
+    description: Query-ready public view of manually reviewed policy-service links.
+    cubes:
+      - join_path: PolicyServiceLinks
+        includes:
+          - row_key
+          - policy_id
+          - agency
+          - service
+          - rationale
+          - reviewer
+          - row_count
+
+  - name: SocioeconomicView
+    description: Query-ready public view of official borough socioeconomic context.
+    cubes:
+      - join_path: Socioeconomic
+        includes:
+          - row_key
+          - vintage
+          - county_fips
+          - borough
+          - population
+          - poverty_universe
+          - poverty_count
+          - median_household_income
+          - row_count
+
+  - name: AgencyPerformanceView
+    description: Query-ready public view of source-cited agency performance indicators.
+    cubes:
+      - join_path: AgencyPerformance
+        includes:
+          - row_key
+          - indicator_id
+          - agency
+          - indicator
+          - period_start
+          - period_end
+          - value
+          - unit
+          - direction
+          - source_url
+          - row_count

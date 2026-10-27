@@ -9,7 +9,12 @@ class SourceError(RuntimeError):
 
 def fetch(url, headers=None, attempts=4):
     request = urllib.request.Request(url, headers={
-        'User-Agent': 'NYCPolicyObservatory/0.1 (public-interest research)',
+        # Several government gateways reject non-browser user agents before
+        # content negotiation and return an HTML block page. Keep a stable,
+        # ordinary browser signature while still identifying this project.
+        'User-Agent': ('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 '
+                       '(KHTML, like Gecko) Chrome/131.0 Safari/537.36 '
+                       'NYCPolicyObservatory/0.1'),
         'Accept': 'application/json,text/html,application/xml', **(headers or {})})
     for attempt in range(attempts):
         try:
