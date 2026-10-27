@@ -1,0 +1,64 @@
+name: Load official policy sources
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/load-policy-sources.yml
+      - observatory/ingest.py
+
+permissions:
+  contents: read
+
+concurrency:
+  group: official-policy-sources
+  cancel-in-progress: false
+
+jobs:
+  load-policy-sources:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      DATABASE_URL: ${{ secrets.NYC_DATABASE_URL }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install project
+        run: python -m pip install -e '.[postgres]'
+      - name: Initialize evidence database
+        run: python -m observatory.cli init
+      - name: Load official ACS borough context
+        id: acs
+        continue-on-error: true
+        run: python -m observatory.cli ingest-acs
+      - name: Discover official NYC agency publications
+        id: agency_publications
+        continue-on-error: true
+        run: python -m observatory.cli discover-news --max-pages 500
+      - name: Discover official Council introductions
+        id: council_introductions
+        continue-on-error: true
+        run: python -m observatory.cli discover-policies
+      - name: Discover official Council events
+        id: council_events
+        continue-on-error: true
+        run: python -m observatory.cli discover-events
+      - name: Publish source artifacts and policy candidates to Neon
+        run: python -m observatory.cli load-postgres-sources
+      - name: Summarize official source coverage
+        if: always()
+        run: |
+          {
+            echo "## Official policy source coverage"
+            echo ""
+            echo "- ACS: ${{ steps.acs.outcome }}"
+            echo "- NYC agency publications: ${{ steps.agency_publications.outcome }}"
+            echo "- Council introductions: ${{ steps.council_introductions.outcome }}"
+            echo "- Council events: ${{ steps.council_events.outcome }}"
+            echo "- Discovered publications remain review candidates and are not implementation findings."
+          } >> "$GITHUB_STEP_SUMMARY"

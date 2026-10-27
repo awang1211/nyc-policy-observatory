@@ -1,6 +1,7 @@
 import calendar
 import csv
 import hashlib
+import io
 import json
 import os
 import re
@@ -114,10 +115,43 @@ def ingest_acs(db):
         fields = ['NAME', 'B01003_001E', 'B17001_001E', 'B17001_002E', 'B19013_001E']
         url = 'https://api.census.gov/data/2024/acs/acs5?' + urlencode({
             'get': ','.join(fields), 'for': 'county:*', 'in': 'state:36'})
-        rows, artifact = fetch_json(db, url)
+        try:
+            rows, artifact = fetch_json(db, url)
+            records = [dict(zip(rows[0], values)) for values in rows[1:]]
+            source_mode = 'Census API'
+        except SourceError:
+            # api.census.gov sometimes serves an HTML denial page to hosted
+            # runners. The table-based ACS summary files are an independent
+            # official Census distribution channel for the same estimates.
+            base = ('https://www2.census.gov/programs-surveys/acs/summary_file/'
+                    '2024/table-based-SF/data/5YRData/')
+            table_fields = {
+                'b01003': ('B01003_001E',),
+                'b17001': ('B17001_001E', 'B17001_002E'),
+                'b19013': ('B19013_001E',),
+            }
+            merged = {}
+            artifacts = []
+            for table, wanted in table_fields.items():
+                bulk_url = base + f'acsdt5y2024-{table}.dat'
+                body, mime = fetch(bulk_url, {'Accept': 'text/csv,text/plain,*/*'})
+                artifacts.append(archive(db, bulk_url, body, mime))
+                reader = csv.DictReader(io.StringIO(body.decode('utf-8-sig')))
+                for item in reader:
+                    geoid = item.get('GEO_ID', '')
+                    if not geoid.startswith('0500000US36'):
+                        continue
+                    county = geoid[-3:]
+                    if county not in COUNTIES:
+                        continue
+                    row = merged.setdefault(county, {'county': county, 'NAME': item.get('NAME', '')})
+                    for key in wanted:
+                        row[key] = item.get(key)
+            records = list(merged.values())
+            artifact = artifacts[0]
+            source_mode = 'Census table-based summary files'
         count = 0
-        for values in rows[1:]:
-            row = dict(zip(rows[0], values))
+        for row in records:
             if row['county'] not in COUNTIES:
                 continue
             def number(key):
@@ -131,7 +165,8 @@ def ingest_acs(db):
         if count != 5:
             raise SourceError('ACS did not return all five NYC counties')
         db.commit()
-        return count, {'complete': True, 'geography': 'county/borough', 'vintage': '2024 ACS 5-year'}
+        return count, {'complete': True, 'geography': 'county/borough',
+                       'vintage': '2024 ACS 5-year', 'distribution': source_mode}
     return run_source(db, 'acs', operation)
 
 def ingest_legislation(db, max_pages=None):

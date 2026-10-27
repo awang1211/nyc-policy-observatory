@@ -10,7 +10,8 @@ from .http import SourceError
 def main():
     parser = argparse.ArgumentParser(description='NYC Policy Implementation Observatory')
     parser.add_argument('command', choices=['init','ingest-311','ingest-acs','discover-policies','discover-events','discover-news',
-        'import-policies','import-agency','import-links','export','validate','inspect-cube','load-postgres','serve'])
+        'import-policies','import-agency','import-links','export','validate','inspect-cube',
+        'load-postgres','load-postgres-sources','serve'])
     parser.add_argument('--input')
     parser.add_argument('--as-of', default=datetime.now(ZoneInfo('America/New_York')).isoformat())
     parser.add_argument('--max-pages',type=int)
@@ -57,6 +58,9 @@ def main():
         elif args.command == 'load-postgres':
             from .cube import load_postgres
             result = load_postgres(db)
+        elif args.command == 'load-postgres-sources':
+            from .cube import load_postgres_sources
+            result = load_postgres_sources(db)
         elif args.command == 'serve':
             from .server import serve
             serve(args.port)

@@ -65,7 +65,7 @@ def load_postgres(db):
     # One transaction, isolated namespace, no changes to other schemas.
     # Parent tables are copied before their dependents. Deletions happen in the
     # reverse order so repeatable refreshes respect PostgreSQL foreign keys.
-    tables = ['source_artifact','ingestion_run','service_metrics','policy','policy_evidence',
+    tables = ['source_artifact','ingestion_run','service_metrics','policy_candidate','policy','policy_evidence',
               'policy_service_link','socioeconomic','agency_performance']
     with psycopg.connect(destination) as pg:
         pg.execute('CREATE SCHEMA IF NOT EXISTS nyc_observatory')
@@ -93,3 +93,43 @@ def load_postgres(db):
             pg.execute(sql.SQL('CREATE UNIQUE INDEX IF NOT EXISTS {} ON {} ({})').format(
                 sql.Identifier('uq_'+table), ident, sql.SQL(',').join(sql.Identifier(c['name']) for c in cols if c['pk'])))
     return {'tables_loaded': tables, 'schema': 'nyc_observatory', 'transaction': 'committed'}
+
+def load_postgres_sources(db):
+    """Upsert newly discovered source records without replacing production metrics."""
+    try:
+        import psycopg
+        from psycopg import sql
+    except ImportError:
+        raise SourceError('Install optional postgres dependency: pip install -e ".[postgres]"') from None
+    destination = os.getenv('DATABASE_URL')
+    if not destination:
+        raise SourceError('DATABASE_URL is missing')
+    tables = ['source_artifact', 'ingestion_run', 'policy_candidate', 'socioeconomic']
+    with psycopg.connect(destination) as pg:
+        pg.execute('CREATE SCHEMA IF NOT EXISTS nyc_observatory')
+        for table in tables:
+            cols = list(db.execute(f'PRAGMA table_info({table})'))
+            definitions = []
+            for col in cols:
+                typ = {'TEXT': 'text', 'INTEGER': 'bigint', 'REAL': 'double precision'}[col['type']]
+                definitions.append(sql.SQL('{} {}').format(sql.Identifier(col['name']), sql.SQL(typ)))
+            ident = sql.Identifier('nyc_observatory', table)
+            pg.execute(sql.SQL('CREATE TABLE IF NOT EXISTS {} ({})').format(
+                ident, sql.SQL(',').join(definitions)))
+            pk = [col['name'] for col in cols if col['pk']]
+            pg.execute(sql.SQL('CREATE UNIQUE INDEX IF NOT EXISTS {} ON {} ({})').format(
+                sql.Identifier('uq_' + table), ident,
+                sql.SQL(',').join(sql.Identifier(name) for name in pk)))
+            names = [col['name'] for col in cols]
+            updates = [name for name in names if name not in pk]
+            statement = sql.SQL('INSERT INTO {} ({}) VALUES ({}) ON CONFLICT ({}) DO UPDATE SET {}').format(
+                ident,
+                sql.SQL(',').join(sql.Identifier(name) for name in names),
+                sql.SQL(',').join(sql.Placeholder() for _ in names),
+                sql.SQL(',').join(sql.Identifier(name) for name in pk),
+                sql.SQL(',').join(sql.SQL('{}=EXCLUDED.{}').format(
+                    sql.Identifier(name), sql.Identifier(name)) for name in updates))
+            with pg.cursor() as cursor:
+                cursor.executemany(statement, [tuple(row) for row in db.execute(f'SELECT * FROM {table}')])
+    return {'tables_upserted': tables, 'schema': 'nyc_observatory',
+            'production_metrics_preserved': True, 'transaction': 'committed'}
