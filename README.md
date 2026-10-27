@@ -1,6 +1,6 @@
 # NYC Policy Implementation Observatory
 
-**Study:** October 2025–September 2026. 
+**Study:** October 2025–September 2026.  
 **Seasonal baseline:** October 2024–September 2025.
 
 **RQ1**: How did municipal initiatives align with documented service needs, and what implementation evidence exists across domains?  
