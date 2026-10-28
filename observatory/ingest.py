@@ -301,6 +301,8 @@ def discover_open_data_catalog(db):
             'City Council legislation',
             'Mayor policy initiatives',
             'agency performance indicators',
+            'Mayor Management Report agency performance',
+            'performance indicators monthly current',
         ]
         assets = {}
         for query in queries:
@@ -333,10 +335,12 @@ def discover_open_data_catalog(db):
         # Surface a bounded, readable shortlist in GitHub's public run page so
         # source selection can be reviewed without exposing credentials.
         terms = ('american community survey', 'acs', 'poverty', 'income',
-                 'council', 'legislation', 'performance', 'indicator')
+                 'council', 'legislation', 'performance', 'indicator',
+                 'management report')
         ranked = sorted(report['candidates'], key=lambda item: (
-            -sum(term in ((item.get('name') or '') + ' ' +
-                          (item.get('description') or '')).casefold() for term in terms),
+            -(sum(term in ((item.get('name') or '') + ' ' +
+                           (item.get('description') or '')).casefold() for term in terms)
+              - (3 if 'historical' in (item.get('name') or '').casefold() else 0)),
             (item.get('name') or '').casefold()))
         for item in ranked[:10]:
             title = ' '.join((item.get('name') or 'Untitled dataset').split())[:180]
@@ -374,6 +378,12 @@ def inspect_open_data_sources(db):
                                 if re.fullmatch(r'(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)_\d{2}', key)]
                 tail = ', '.join(f'{key}={value}' for key, value in dated_values[-12:])
                 print(f'::notice title={dataset_id} latest values::{tail or "No month fields in sample"}')
+        if dataset_id == '6ctv-n46c':
+            aggregate, _ = fetch_json(db, f'{SOCRATA}/resource/{dataset_id}.json?' + urlencode({
+                '$select': 'max(intro_date) as max_intro,max(passed_date) as max_passed,max(enacted_date) as max_enacted'}))
+            if aggregate:
+                values = ', '.join(f'{key}={value}' for key, value in aggregate[0].items())
+                print(f'::notice title={dataset_id} latest dates::{values}')
     from .storage import write_json
     write_json(ROOT / 'reports/open-data-schemas.json', schemas)
     return {'datasets': len(schemas), 'report': 'reports/open-data-schemas.json'}
