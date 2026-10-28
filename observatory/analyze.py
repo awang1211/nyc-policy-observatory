@@ -87,31 +87,32 @@ def analyze_postgres(output_dir='reports'):
             coverage text NOT NULL, limitation text NOT NULL)''')
         for table in ('research_summary', 'borough_comparison', 'operational_priority', 'research_data_status'):
             pg.execute(f'DELETE FROM nyc_observatory.{table}')
-        pg.executemany('INSERT INTO nyc_observatory.research_summary VALUES (%s,%s,%s,%s,%s,%s)', [
-            (row['period'], row['requests'], row['eligible_30d'], row['closed_30d'],
-             row['unresolved_asof'], row['closure_30d_rate']) for row in overall])
-        pg.executemany('INSERT INTO nyc_observatory.borough_comparison VALUES (%s,%s,%s,%s,%s,%s)', [
-            (row['borough'], row['period'], row['requests'], row['eligible_30d'],
-             row['closed_30d'], row['closure_30d_rate']) for row in borough])
-        pg.executemany('INSERT INTO nyc_observatory.operational_priority VALUES (' + ','.join(['%s'] * 15) + ')', [
-            (rank, row['agency'], row['service'], row['borough'], row['community_district'],
-             row['baseline_requests'], row['study_requests'], row['baseline_eligible'],
-             row['study_eligible'], row['baseline_closed'], row['study_closed'],
-             row['baseline_rate'], row['study_rate'], row['change_percentage_points'],
-             row['request_change_percent']) for rank, row in enumerate(priorities, 1)])
-        pg.executemany('INSERT INTO nyc_observatory.research_data_status VALUES (%s,%s,%s,%s,%s)', [
-            ('NYC 311', 'complete', 'RQ2', 'October 2024–September 2026',
-             'Reported demand and administrative closure do not prove need or resolution.'),
-            ('Neighborhood geography', 'identified', 'RQ2 mapping', '2020 NTA and CDTA official assets',
-             'Boundary integration remains pending.'),
-            ('Socioeconomic context', 'missing', 'RQ2 equity context', 'No accepted study-period load',
-             'Do not infer socioeconomic equity from 311 counts alone.'),
-            ('Study-year policy registry', 'missing', 'RQ1', 'Council Open Data ends February 2025',
-             'No complete October 2025–September 2026 registry is available.'),
-            ('Implementation evidence', 'missing', 'RQ1', 'Automated official publication access blocked',
-             'Announced policy must not be labeled implemented without reviewed evidence.'),
-            ('Agency performance', 'under_review', 'RQ2 context', 'Current official candidates identified',
-             'Use only after 2025–2026 coverage is verified.')])
+        with pg.cursor() as cursor:
+            cursor.executemany('INSERT INTO nyc_observatory.research_summary VALUES (%s,%s,%s,%s,%s,%s)', [
+                (row['period'], row['requests'], row['eligible_30d'], row['closed_30d'],
+                 row['unresolved_asof'], row['closure_30d_rate']) for row in overall])
+            cursor.executemany('INSERT INTO nyc_observatory.borough_comparison VALUES (%s,%s,%s,%s,%s,%s)', [
+                (row['borough'], row['period'], row['requests'], row['eligible_30d'],
+                 row['closed_30d'], row['closure_30d_rate']) for row in borough])
+            cursor.executemany('INSERT INTO nyc_observatory.operational_priority VALUES (' + ','.join(['%s'] * 15) + ')', [
+                (rank, row['agency'], row['service'], row['borough'], row['community_district'],
+                 row['baseline_requests'], row['study_requests'], row['baseline_eligible'],
+                 row['study_eligible'], row['baseline_closed'], row['study_closed'],
+                 row['baseline_rate'], row['study_rate'], row['change_percentage_points'],
+                 row['request_change_percent']) for rank, row in enumerate(priorities, 1)])
+            cursor.executemany('INSERT INTO nyc_observatory.research_data_status VALUES (%s,%s,%s,%s,%s)', [
+                ('NYC 311', 'complete', 'RQ2', 'October 2024–September 2026',
+                 'Reported demand and administrative closure do not prove need or resolution.'),
+                ('Neighborhood geography', 'identified', 'RQ2 mapping', '2020 NTA and CDTA official assets',
+                 'Boundary integration remains pending.'),
+                ('Socioeconomic context', 'missing', 'RQ2 equity context', 'No accepted study-period load',
+                 'Do not infer socioeconomic equity from 311 counts alone.'),
+                ('Study-year policy registry', 'missing', 'RQ1', 'Council Open Data ends February 2025',
+                 'No complete October 2025–September 2026 registry is available.'),
+                ('Implementation evidence', 'missing', 'RQ1', 'Automated official publication access blocked',
+                 'Announced policy must not be labeled implemented without reviewed evidence.'),
+                ('Agency performance', 'under_review', 'RQ2 context', 'Current official candidates identified',
+                 'Use only after 2025–2026 coverage is verified.')])
 
     if not overall or sum(row['requests'] for row in overall) == 0:
         raise RuntimeError('Validated service metrics are empty')
