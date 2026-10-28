@@ -45,6 +45,9 @@ jobs:
       - name: Load selected official Council and performance data
         id: selected_open_data
         run: python -m observatory.cli ingest-open-data
+      - name: Confirm selected datasets contain real records
+        id: verified_open_data
+        run: python -m observatory.cli verify-open-data
       - name: Discover official NYC agency publications
         id: agency_publications
         continue-on-error: true
@@ -69,6 +72,7 @@ jobs:
             echo "- NYC Open Data source search: ${{ steps.open_data_catalog.outcome }}"
             echo "- Selected official data fields: ${{ steps.open_data_schemas.outcome }}"
             echo "- Selected Council and performance data: ${{ steps.selected_open_data.outcome }}"
+            echo "- Non-empty Council and performance records: ${{ steps.verified_open_data.outcome }}"
             echo "- NYC agency publications: ${{ steps.agency_publications.outcome }}"
             echo "- Council introductions: ${{ steps.council_introductions.outcome }}"
             echo "- Council events: ${{ steps.council_events.outcome }}"

@@ -10,7 +10,7 @@ from .http import SourceError
 def main():
     parser = argparse.ArgumentParser(description='NYC Policy Implementation Observatory')
     parser.add_argument('command', choices=['init','ingest-311','ingest-acs','discover-policies','discover-events',
-        'discover-news','discover-open-data','inspect-open-data','ingest-open-data',
+        'discover-news','discover-open-data','inspect-open-data','ingest-open-data','verify-open-data',
         'import-policies','import-agency','import-links','export','validate','inspect-cube',
         'load-postgres','load-postgres-sources','serve'])
     parser.add_argument('--input')
@@ -46,6 +46,13 @@ def main():
         elif args.command == 'ingest-open-data':
             from .ingest import ingest_selected_open_data
             result = ingest_selected_open_data(db)
+        elif args.command == 'verify-open-data':
+            council = db.execute("SELECT COUNT(*) FROM policy_candidate WHERE source_id LIKE 'nyc-open-data-council:%'").fetchone()[0]
+            performance = db.execute('SELECT COUNT(*) FROM agency_performance').fetchone()[0]
+            print(f'::notice title=Imported official data::Council records: {council}; agency performance records: {performance}')
+            if council == 0 or performance == 0:
+                raise SourceError('Selected official datasets produced zero Council or agency performance records')
+            result = {'council_records': council, 'agency_performance_records': performance}
         elif args.command.startswith('import-'):
             if not args.input:
                 parser.error('--input CSV is required')
