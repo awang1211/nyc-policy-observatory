@@ -361,8 +361,19 @@ def inspect_open_data_sources(db):
         if not fields:
             raise SourceError(f'Official dataset {dataset_id} has no machine-readable fields')
         schemas[dataset_id] = {'label': label, 'name': metadata.get('name'), 'fields': fields}
-        safe_fields = ', '.join(fields[:35])
+        safe_fields = ', '.join(fields[:18] + (['...'] if len(fields) > 36 else []) + fields[-18:])
         print(f'::notice title={dataset_id} {label}::{safe_fields}')
+        sample, _ = fetch_json(db, f'{SOCRATA}/resource/{dataset_id}.json?$limit=1')
+        if sample:
+            if dataset_id == '6ctv-n46c':
+                dates = ', '.join(f'{key}={sample[0].get(key)}' for key in
+                                  ('intro_date', 'agenda_date', 'passed_date', 'enacted_date'))
+                print(f'::notice title={dataset_id} date example::{dates}')
+            elif dataset_id == 'phxt-vb3r':
+                dated_values = [(key, value) for key, value in sample[0].items()
+                                if re.fullmatch(r'(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)_\d{2}', key)]
+                tail = ', '.join(f'{key}={value}' for key, value in dated_values[-12:])
+                print(f'::notice title={dataset_id} latest values::{tail or "No month fields in sample"}')
     from .storage import write_json
     write_json(ROOT / 'reports/open-data-schemas.json', schemas)
     return {'datasets': len(schemas), 'report': 'reports/open-data-schemas.json'}
