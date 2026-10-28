@@ -1,4 +1,4 @@
-name: Validate observatory
+name: Validate project
 on: [push, pull_request]
 jobs:
   validate:

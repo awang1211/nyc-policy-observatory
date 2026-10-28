@@ -1,21 +1,29 @@
-# Access and delivery — 27 October 2026
+# Access and delivery status — 28 October 2026
 
-## Completed locally
+Cube Cloud is connected to the repository `main` branch and to the Neon
+PostgreSQL database. Git deployment has compiled and deployed the semantic
+models. Neon contains the complete 24-month 311 aggregates and reviewed analysis
+tables.
 
-Executable SQLite pipeline, provenance archiving, 311/ACS connectors, Council introduction/event discovery, bounded official-news discovery, reviewed policy/agency/link contracts, metrics/export, independent SQL validation, PostgreSQL publication code, six Cube model files, three interactive local pages, tests and research documentation.
+## Delivered
 
-## External blockers
+- Complete official 311 baseline and study-period load.
+- Independently validated city, borough, month and neighborhood metrics.
+- Dashboard-ready PostgreSQL analysis tables.
+- Ten query-ready Cube views, including four reviewed analysis views.
+- Three-page local application, reproducible pipeline, methods, dictionary,
+  source catalog and executive brief.
 
-The configured proxy denied Cube, NYC Open Data, NYC government, Census and Legistar. The running policy still excludes the required custom domains. This is a network-policy blocker, **not a diagnosed Cube authentication failure**. No `CUBE_API_URL`, `CUBE_API_TOKEN` or `DATABASE_URL` binding was available. There is no authenticated Cube tool/session in this task.
+## Remaining authenticated UI step
 
-Required domains were saved to the environment draft. Review and save environment settings, then publish the environment. Draft persistence did not apply runtime access or publish. Retry `scripts/probe_access.py` after that change. Do not bypass proxy policy.
+The native Cube page layouts must be created in the signed-in Cube interface.
+Their exact fields, filters, notes and acceptance totals are specified in
+`docs/cube-dashboard-guide.md`. This layout is not stored in the repository's
+supported Cube semantic-model files.
 
-Configure a supported authenticated Cube session or secure query endpoint/token binding and an authorized database connection as needed. Credential values belong in secure settings, never chat or tracked files. Query tokens do not imply native Dashboard authoring permissions.
+## Evidence gaps
 
-The referenced starter kit was not attached or found locally. This build does not claim to incorporate it.
-
-## Outstanding, not claimed complete
-
-Actual Cube connection/model/Workbook/feature inspection; real 311/ACS/agency acquisition; broad verified policy registry; evidence-backed RQ1/RQ2 findings; live PostgreSQL load/Cube reconciliation; native dashboard deployment; GitHub push/publication.
-
-Fixture checks validate software, not policy responsiveness, equity trends or agency priorities. The brief is a readiness edition. The local UI displays unavailable coverage. Resume source research after access is enabled rather than treating the software as a completed observatory.
+RQ1 is incomplete because the accessible Council dataset ends in February 2025
+and automated study-period Mayor/agency publication retrieval is blocked. ACS
+socioeconomic context is also unavailable from the hosted runner. These gaps
+are displayed explicitly and are not replaced with estimates.

@@ -1,0 +1,38 @@
+name: Publish Cube models
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/publish-cube.yml
+      - model/cubes/**
+
+permissions:
+  contents: read
+
+jobs:
+  validate-cube-models:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install Cube schema compiler
+        run: npm install --no-save @cubejs-backend/schema-compiler@1.8.14
+      - name: Compile every dashboard query view
+        run: node scripts/check_models.cjs
+      - name: Explain publication path
+        run: |
+          {
+            echo "## Cube publication"
+            echo ""
+            echo "- All dashboard query views compiled successfully."
+            echo "- Cube Cloud is connected to this repository's main branch."
+            echo "- Cube Cloud performs the hosted deployment after this Git push."
+            echo "- Native dashboard layout is authored in Cube Cloud using docs/cube-dashboard-guide.md."
+          } >> "$GITHUB_STEP_SUMMARY"

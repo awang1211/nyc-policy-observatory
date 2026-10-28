@@ -1,4 +1,4 @@
-name: Load official policy sources
+name: Load policy and context data
 
 on:
   workflow_dispatch:

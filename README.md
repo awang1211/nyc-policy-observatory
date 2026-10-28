@@ -55,8 +55,8 @@ Full 311 ingestion spans 24 months and may require millions of rows, significant
 
 Discovery creates candidates, never implementation claims. Broad source review and deduplication follow [methodology](docs/methodology.md). News seed URLs are provisional acquisition targets, not verified working endpoints. The bounded news crawler always records incomplete coverage.
 
-The former smoke workflow is retained only as development history and is not a
-research result. Formal analysis uses the complete production load. Store the
+The former smoke workflow has been removed to avoid confusing a bounded test
+with a research result. Formal analysis uses the complete production load. Store the
 direct Neon connection string in the repository Actions secret
 `NYC_DATABASE_URL`; workflows map it to `DATABASE_URL`. Never commit it.
 
@@ -76,8 +76,9 @@ their own outcomes and do not conceal or block the required 311 validation path.
 Configure the exact `CUBE_API_URL` and a query token as `CUBE_API_TOKEN`, run `inspect-cube`, restart the server, then select **Cube REST**. Tokens stay server-side. The server rejects Cube metric counts that do not reconcile to the local evidence export. Registry/provenance still comes from that export and is labeled accordingly. A query token does not grant Cloud management permissions.
 
 The local three-page application is separate from native Cube Dashboard objects.
-The semantic models required for the three native pages are deployed; native
-Workbook/Dashboard layout authoring is the next delivery step.
+The semantic models required for the three native pages are deployed. Use the
+[Cube dashboard build guide](docs/cube-dashboard-guide.md) for the exact native
+page fields, filters, caveats and acceptance totals.
 
 ## Verify
 

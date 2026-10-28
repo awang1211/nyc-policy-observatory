@@ -1,4 +1,4 @@
-name: Load production research data
+name: Load service data
 
 on:
   workflow_dispatch:

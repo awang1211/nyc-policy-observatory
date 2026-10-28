@@ -1,36 +1,35 @@
-# 当前进展与下一步
+# Current progress
 
-更新日期：2026 年 10 月 27 日。
+Updated 28 October 2026.
 
-**目前完成的是本地软件基础，还没有完成真实数据研究，也没有更新 Cube Cloud。**
-
-| 工作 | 状态 |
+| Work | Status |
 |---|---|
-| 数据库、抓取与处理程序 | 已编写；通过隔离的模拟数据测试；真实来源接口仍待联网核验 |
-| 指标计算 | 12 项 Python 测试、5 项 JavaScript 测试通过；包含独立 SQL 对账与边界值验证 |
-| Cube 语义模型 | 6 个模型通过官方编译器本地编译和 PostgreSQL SQL 生成检查 |
-| 三个本地交互页面 | 已完成浏览器检查，覆盖页面切换、手机布局、筛选、证据弹窗、阈值与导出 |
-| 研究方法、数据字典、两页简报 | 已生成；简报为研究准备版，不含未经证实的结论 |
-| 真实 311、ACS、机构绩效数据 | 尚未取得；网络代理拒绝访问官方来源 |
-| 覆盖多个政策领域的已核实政策库 | 尚未完成；没有用虚构政策填充 |
-| Cube 线上模型、Workbook、Dashboard | 尚未检查或修改；没有部署 |
+| Complete 24-month 311 load | Complete: 7,559,591 requests across both periods |
+| Independent metric validation | Complete |
+| Neon publication | Complete |
+| Cube semantic models and query views | Complete through Git deployment |
+| Neighborhood Equity analysis | Complete; native Cube page layout remains |
+| Operational Priorities analysis | Complete; 50 leads published; native page remains |
+| Policy Responsiveness registry | Incomplete because official study-period sources remain unavailable |
+| Methods, dictionary and executive brief | Complete and updated |
 
-## 为什么线上看不到更新
+## Current stage
 
-本地仓库与 Cube Cloud 是两个不同位置。当前文件位于 `/workspace/nyc-policy-observatory`，没有被部署到你的工作区。访问 `anruow.cubecloud.dev` 时，环境代理在认证步骤之前就拒绝连接；这不是已经诊断出的账号密码问题。本会话也没有可用的 Cube 访问绑定或支持的已登录会话。
+The project is in native Cube dashboard authoring. No further 311 collection is
+needed for the current study. Use `docs/cube-dashboard-guide.md` to build and
+accept the three pages from the deployed query views.
 
-## 当前需要的外部操作
+## Formal workflows
 
-请在**本聊天关联的云环境设置**中审核、保存已提交的域名权限草稿，并发布环境，让联网权限生效。这一步不是在 Cube 的工作区页面里操作。
+The repository exposes five formal GitHub Actions workflows:
 
-之后重新测试访问，再检查 Cube 的具体认证、连接、已有模型及原生 Dashboard 支持。需要凭据时，通过安全设置提供，不要在聊天中发送密钥。网络放通不等于获得部署权限，也不等于已经部署。
+1. `Validate project` checks code, calculations and the local application.
+2. `Load service data` retrieves and validates the complete 311 periods.
+3. `Load policy and context data` attempts official policy/context retrieval and
+   fails visibly when required study-period coverage is absent.
+4. `Analyze research data` builds the reviewed analysis and Neon dashboard tables.
+5. `Publish Cube models` compiles every dashboard query view; Cube Cloud then
+   deploys `main` through its connected Git integration.
 
-## 继续工作的顺序
-
-1. 重试联网并检查实际 Cube 工作区。
-2. 获取真实官方数据，广泛发现、核对并去重政策记录。
-3. 校验研究口径、数据质量和覆盖程度，回答两个研究问题。
-4. 在授权数据库中加载派生数据，通过 Cube 支持的流程部署模型和页面。
-5. 核对线上查询、筛选与指标，生成有真实证据的最终简报。
-
-具体可复现命令见 [项目说明](../README.md)。政策宣布、法定通过、已核实交付始终分开；311 结案不等于问题解决；不作未经支持的因果判断。
+The former smoke workflow was removed because it was a development check and
+could be confused with a complete research load.
