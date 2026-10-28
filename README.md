@@ -8,11 +8,18 @@
 
 ## Delivery status
 
-This repository contains an executable pipeline, SQLite schema, PostgreSQL publication command, six Cube models, three interactive local dashboard pages, tests, methodology, dictionary, source catalog and two-page executive **readiness** brief. **Official observations and a verified policy registry are not loaded. Nothing has been deployed to Cube Cloud.** Current Cube connections, Workbooks and native Dashboard features could not be inspected.
+This repository now contains a validated 24-month NYC 311 pipeline, PostgreSQL
+publication, independent analysis, fourteen Cube cubes/views, three interactive
+local dashboard pages, tests, methodology, dictionary, source catalog and an
+executive brief. Cube Cloud is connected to GitHub and Neon, and the deployed
+semantic layer can query the complete 311 baseline and study periods.
 
-On 27 October 2026 the environment proxy denied access to Cube and the official NYC/Census sources. Required domains are saved in the environment configuration draft; they are not active until settings are saved and the environment is published. Cube/database bindings are absent. No starter kit was attached or available locally. See [access and delivery status](docs/access-and-delivery.md).
-
-The dashboard displays **Unavailable**, not fabricated research results. Synthetic observations exist only in tests.
+RQ2 has a source-backed descriptive result: 3,595,690 baseline requests and
+3,963,901 study-period requests, with the weighted 30-day administrative closure
+rate moving from 91.0% to 90.4%. RQ1 remains incomplete because the accessible
+Council dataset ends in February 2025 and automated Mayor/agency publication
+retrieval is blocked. Missing policy and socioeconomic evidence is displayed as
+a coverage gap rather than filled with estimates.
 
 ## Run locally
 
@@ -48,11 +55,17 @@ Full 311 ingestion spans 24 months and may require millions of rows, significant
 
 Discovery creates candidates, never implementation claims. Broad source review and deduplication follow [methodology](docs/methodology.md). News seed URLs are provisional acquisition targets, not verified working endpoints. The bounded news crawler always records incomplete coverage.
 
-For an end-to-end connectivity check, the manually dispatched GitHub Actions workflow `Load smoke data` retrieves ACS plus one bounded 311/Council page and publishes only derived tables to Neon. It is intentionally partial and must never be described as the completed study. Store the direct Neon connection string in the repository Actions secret `NYC_DATABASE_URL`; the workflow maps it to the application's `DATABASE_URL` process variable. Never commit it.
+The former smoke workflow is retained only as development history and is not a
+research result. Formal analysis uses the complete production load. Store the
+direct Neon connection string in the repository Actions secret
+`NYC_DATABASE_URL`; workflows map it to `DATABASE_URL`. Never commit it.
 
 ## Cube deployment
 
-See [deployment and feature inspection](docs/cube-deployment.md). Securely configure an authorized `DATABASE_URL`; install `python3 -m pip install -e '.[postgres]'`; run `load-postgres`. This transactionally replaces only this project's derived tables in `nyc_observatory`; verify the destination first. Cube reads the six `model/cubes/*.yml` files from the repository root; preserve existing connections/models.
+See [deployment and feature inspection](docs/cube-deployment.md). Cube reads the
+files under `model/cubes/` from the repository root. Reviewed analysis tables
+provide dashboard-ready totals, borough comparisons, 50 operational priorities
+and explicit source-coverage status.
 
 The `Load production research data` GitHub Actions workflow retrieves the complete
 October 2024 through September 2026 311 baseline and study window, performs monthly
@@ -62,7 +75,9 @@ their own outcomes and do not conceal or block the required 311 validation path.
 
 Configure the exact `CUBE_API_URL` and a query token as `CUBE_API_TOKEN`, run `inspect-cube`, restart the server, then select **Cube REST**. Tokens stay server-side. The server rejects Cube metric counts that do not reconcile to the local evidence export. Registry/provenance still comes from that export and is labeled accordingly. A query token does not grant Cloud management permissions.
 
-The local three-page application is separate from native Cube Dashboard objects. Native Workbooks/Dashboards require authenticated feature inspection and authoring; they have not been created.
+The local three-page application is separate from native Cube Dashboard objects.
+The semantic models required for the three native pages are deployed; native
+Workbook/Dashboard layout authoring is the next delivery step.
 
 ## Verify
 
@@ -78,6 +93,11 @@ Tests cover independent expected counts, 30-day boundaries, daylight saving, mat
 
 All repository directory and file names use English ASCII names. Documentation content may be Chinese.
 
-`observatory/`: acquisition, storage, metrics, export and server. `sql/`: tables/constraints. `model/cubes/`: six PostgreSQL-backed facts without fanout joins. `web/`: interactive pages. `data/inputs/`: review contracts. `data/raw/` and `data/processed/`: ignored source files/database/exports. `docs/`: research and deployment documentation. `reports/`: validation evidence and executive PDF. `tests/`: isolated fixtures. `scripts/`: access probe, brief generation and semantic compiler check.
+`observatory/`: acquisition, storage, metrics, analysis and server. `sql/`:
+tables/constraints. `model/cubes/`: PostgreSQL-backed cubes and query views.
+`web/`: interactive pages. `data/inputs/`: review contracts. `docs/`: research
+and deployment documentation. `reports/`: analysis and validation evidence.
+`tests/`: isolated fixtures. `scripts/`: brief generation and model checks.
 
-Do not commit secrets, caller data, addresses, large raw datasets, or synthetic observations as research data. GitHub push/publication has not been performed.
+Do not commit secrets, caller data, addresses, large raw datasets, or synthetic
+observations as research data.

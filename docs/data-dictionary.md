@@ -14,6 +14,10 @@ Null means unknown/unavailable, not zero. Periods have inclusive starts/exclusiv
 | `socioeconomic`: county/vintage | Composite `vintage`,`county_fips`; `borough`; `population` B01003_001E; `poverty_universe` B17001_001E; `poverty_count` B17001_002E; `median_household_income` B19013_001E; `artifact_id` | Negative Census sentinels→null; income in vintage dollars; no district estimates or MOEs |
 | `agency_performance`: indicator/period | Composite `indicator_id`,`period_start`,`period_end`; `agency`; `indicator`; numeric `value`; `unit`; `direction`; `source_url`; `artifact_id` | Direction higher_is_better/lower_is_better/context; actual fiscal period; quote checked at import |
 | `service_metrics`: monthly cell | Hash `metric_id`; `period` study/baseline; `month` YYYY-MM; agency/service/borough/community district | Unique tuple; regenerated for one explicit cutoff |
+| `research_summary`: period | Baseline/study request, maturity, closure and unresolved totals | Independently calculated dashboard headline table |
+| `borough_comparison`: borough/period | Requests, mature denominator, 30-day closures and weighted rate | Named boroughs plus Unspecified; no population adjustment |
+| `operational_priority`: ranked combination | Agency, service, borough, district, baseline/study counts and rates, changes | Top 50 comparable cells; ≥30 mature requests in each period; investigation queue only |
+| `research_data_status`: source category | Dataset, status, intended RQ, coverage and limitation | Makes missing policy/socioeconomic evidence visible in Cube |
 
 | Metric field | Unit / definition | Aggregation |
 |---|---|---|
