@@ -1,0 +1,45 @@
+name: Analyze current research data
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/analyze-current-data.yml
+      - observatory/analyze.py
+
+permissions:
+  contents: write
+
+concurrency:
+  group: current-research-analysis
+  cancel-in-progress: false
+
+jobs:
+  analyze-current-data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      DATABASE_URL: ${{ secrets.NYC_DATABASE_URL }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install project
+        run: python -m pip install -e '.[postgres]'
+      - name: Analyze validated 311 metrics
+        run: python -m observatory.analyze
+      - name: Save reviewed analysis in repository
+        run: |
+          git config user.name "Anruo Wang"
+          git config user.email "289478850+awang1211@users.noreply.github.com"
+          git add reports/current-analysis.json reports/current-analysis.md
+          if git diff --cached --quiet; then
+            echo "Analysis outputs are unchanged."
+          else
+            git commit -m "Update validated 311 analysis"
+            git push origin HEAD:main
+          fi
