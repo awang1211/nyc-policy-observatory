@@ -10,7 +10,9 @@ const root=path.resolve(__dirname,'../model/cubes');
  for(const [cube,measure,dimension] of [
   ['ServiceMetricsView','closure_30d_rate','borough'],['PoliciesView','row_count','domain'],
   ['PolicyEvidenceView','row_count','evidence_type'],['PolicyServiceLinksView','row_count','agency'],
-  ['SocioeconomicView','row_count','borough'],['AgencyPerformanceView','row_count','agency']]){
+  ['SocioeconomicView','row_count','borough'],['AgencyPerformanceView','row_count','agency'],
+  ['ResearchSummaryView','requests','period'],['BoroughComparisonView','requests','borough'],
+  ['OperationalPrioritiesView','row_count','agency'],['ResearchDataStatusView','row_count','status']]){
   const query=compilers.createQuery(PostgresQuery,{measures:[`${cube}.${measure}`],dimensions:[`${cube}.${dimension}`],timezone:'America/New_York'});
   generated[cube]=query.buildSqlAndParams()[0];
  }

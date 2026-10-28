@@ -100,3 +100,58 @@ views:
           - direction
           - source_url
           - row_count
+
+  - name: ResearchSummaryView
+    description: Reviewed baseline and study-period totals for dashboard headlines.
+    cubes:
+      - join_path: ResearchSummary
+        includes:
+          - period
+          - requests
+          - eligible_30d
+          - closed_30d
+          - unresolved_asof
+          - closure_30d_rate
+
+  - name: BoroughComparisonView
+    description: Reviewed borough comparison for the Neighborhood Equity page.
+    cubes:
+      - join_path: BoroughComparison
+        includes:
+          - row_key
+          - borough
+          - period
+          - requests
+          - eligible_30d
+          - closed_30d
+          - closure_30d_rate
+
+  - name: OperationalPrioritiesView
+    description: Fifty comparable agency-service-neighborhood combinations for investigation.
+    cubes:
+      - join_path: OperationalPriorities
+        includes:
+          - priority_rank
+          - agency
+          - service
+          - borough
+          - community_district
+          - baseline_requests
+          - study_requests
+          - baseline_rate
+          - study_rate
+          - change_percentage_points
+          - request_change_percent
+          - row_count
+
+  - name: ResearchDataStatusView
+    description: Explicit coverage and data gaps for the Policy Responsiveness page.
+    cubes:
+      - join_path: ResearchDataStatus
+        includes:
+          - dataset
+          - status
+          - usable_for
+          - coverage
+          - limitation
+          - row_count

@@ -1,0 +1,29 @@
+cubes:
+  - name: BoroughComparison
+    data_source: nyc_observatory
+    sql: SELECT * FROM nyc_observatory.borough_comparison
+    dimensions:
+      - name: row_key
+        sql: concat_ws('|',{CUBE}.borough,{CUBE}.period)
+        type: string
+        primary_key: true
+      - name: borough
+        sql: '{CUBE}.borough'
+        type: string
+      - name: period
+        sql: '{CUBE}.period'
+        type: string
+    measures:
+      - name: requests
+        sql: '{CUBE}.requests'
+        type: sum
+      - name: eligible_30d
+        sql: '{CUBE}.eligible_30d'
+        type: sum
+      - name: closed_30d
+        sql: '{CUBE}.closed_30d'
+        type: sum
+      - name: closure_30d_rate
+        sql: '{closed_30d} * 1.0 / NULLIF({eligible_30d}, 0)'
+        type: number
+        format: percent

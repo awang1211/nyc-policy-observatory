@@ -1,0 +1,42 @@
+cubes:
+  - name: OperationalPriorities
+    data_source: nyc_observatory
+    sql: SELECT * FROM nyc_observatory.operational_priority
+    dimensions:
+      - name: priority_rank
+        sql: '{CUBE}.priority_rank'
+        type: number
+        primary_key: true
+      - name: agency
+        sql: '{CUBE}.agency'
+        type: string
+      - name: service
+        sql: '{CUBE}.service'
+        type: string
+      - name: borough
+        sql: '{CUBE}.borough'
+        type: string
+      - name: community_district
+        sql: '{CUBE}.community_district'
+        type: string
+      - name: baseline_requests
+        sql: '{CUBE}.baseline_requests'
+        type: number
+      - name: study_requests
+        sql: '{CUBE}.study_requests'
+        type: number
+      - name: baseline_rate
+        sql: '{CUBE}.baseline_rate'
+        type: number
+      - name: study_rate
+        sql: '{CUBE}.study_rate'
+        type: number
+      - name: change_percentage_points
+        sql: '{CUBE}.change_percentage_points'
+        type: number
+      - name: request_change_percent
+        sql: '{CUBE}.request_change_percent'
+        type: number
+    measures:
+      - name: row_count
+        type: count

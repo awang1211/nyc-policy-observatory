@@ -1,0 +1,24 @@
+cubes:
+  - name: ResearchDataStatus
+    data_source: nyc_observatory
+    sql: SELECT * FROM nyc_observatory.research_data_status
+    dimensions:
+      - name: dataset
+        sql: '{CUBE}.dataset'
+        type: string
+        primary_key: true
+      - name: status
+        sql: '{CUBE}.status'
+        type: string
+      - name: usable_for
+        sql: '{CUBE}.usable_for'
+        type: string
+      - name: coverage
+        sql: '{CUBE}.coverage'
+        type: string
+      - name: limitation
+        sql: '{CUBE}.limitation'
+        type: string
+    measures:
+      - name: row_count
+        type: count

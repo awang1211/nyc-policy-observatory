@@ -1,0 +1,26 @@
+cubes:
+  - name: ResearchSummary
+    data_source: nyc_observatory
+    sql: SELECT * FROM nyc_observatory.research_summary
+    dimensions:
+      - name: period
+        sql: '{CUBE}.period'
+        type: string
+        primary_key: true
+    measures:
+      - name: requests
+        sql: '{CUBE}.requests'
+        type: sum
+      - name: eligible_30d
+        sql: '{CUBE}.eligible_30d'
+        type: sum
+      - name: closed_30d
+        sql: '{CUBE}.closed_30d'
+        type: sum
+      - name: unresolved_asof
+        sql: '{CUBE}.unresolved_asof'
+        type: sum
+      - name: closure_30d_rate
+        sql: '{closed_30d} * 1.0 / NULLIF({eligible_30d}, 0)'
+        type: number
+        format: percent

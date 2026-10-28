@@ -6,7 +6,11 @@
     "PolicyEvidenceView",
     "PolicyServiceLinksView",
     "SocioeconomicView",
-    "AgencyPerformanceView"
+    "AgencyPerformanceView",
+    "ResearchSummaryView",
+    "BoroughComparisonView",
+    "OperationalPrioritiesView",
+    "ResearchDataStatusView"
   ],
   "generated_sql": {
     "ServiceMetricsView": "SELECT \"service_metrics\".borough \"service_metrics_view__borough\", sum(\"service_metrics\".closed_30d) * 1.0 / NULLIF(sum(\"service_metrics\".eligible_30d), 0) \"service_metrics_view__closure_30d_rate\" \nFROM  nyc_observatory.service_metrics  AS \"service_metrics\"\nGROUP BY 1\nORDER BY  2  DESC",
@@ -14,7 +18,11 @@
     "PolicyEvidenceView": "SELECT \"policy_evidence\".evidence_type \"policy_evidence_view__evidence_type\", count(\"policy_evidence\".evidence_id) \"policy_evidence_view__row_count\" \nFROM  nyc_observatory.policy_evidence  AS \"policy_evidence\"\nGROUP BY 1\nORDER BY  2  DESC",
     "PolicyServiceLinksView": "SELECT \"policy_service_links\".agency \"policy_service_links_view__agency\", count(concat_ws('|',\"policy_service_links\".policy_id,\"policy_service_links\".agency,\"policy_service_links\".service)) \"policy_service_links_view__row_count\" \nFROM  nyc_observatory.policy_service_link  AS \"policy_service_links\"\nGROUP BY 1\nORDER BY  2  DESC",
     "SocioeconomicView": "SELECT \"socioeconomic\".borough \"socioeconomic_view__borough\", count(concat_ws('|',\"socioeconomic\".vintage,\"socioeconomic\".county_fips)) \"socioeconomic_view__row_count\" \nFROM  nyc_observatory.socioeconomic  AS \"socioeconomic\"\nGROUP BY 1\nORDER BY  2  DESC",
-    "AgencyPerformanceView": "SELECT \"agency_performance\".agency \"agency_performance_view__agency\", count(concat_ws('|',\"agency_performance\".indicator_id,\"agency_performance\".period_start,\"agency_performance\".period_end)) \"agency_performance_view__row_count\" \nFROM  nyc_observatory.agency_performance  AS \"agency_performance\"\nGROUP BY 1\nORDER BY  2  DESC"
+    "AgencyPerformanceView": "SELECT \"agency_performance\".agency \"agency_performance_view__agency\", count(concat_ws('|',\"agency_performance\".indicator_id,\"agency_performance\".period_start,\"agency_performance\".period_end)) \"agency_performance_view__row_count\" \nFROM  nyc_observatory.agency_performance  AS \"agency_performance\"\nGROUP BY 1\nORDER BY  2  DESC",
+    "ResearchSummaryView": "SELECT \"research_summary\".period \"research_summary_view__period\", sum(\"research_summary\".requests) \"research_summary_view__requests\" \nFROM  nyc_observatory.research_summary  AS \"research_summary\"\nGROUP BY 1\nORDER BY  2  DESC",
+    "BoroughComparisonView": "SELECT \"borough_comparison\".borough \"borough_comparison_view__borough\", sum(\"borough_comparison\".requests) \"borough_comparison_view__requests\" \nFROM  nyc_observatory.borough_comparison  AS \"borough_comparison\"\nGROUP BY 1\nORDER BY  2  DESC",
+    "OperationalPrioritiesView": "SELECT \"operational_priorities\".agency \"operational_priorities_view__agency\", count(\"operational_priorities\".priority_rank) \"operational_priorities_view__row_count\" \nFROM  nyc_observatory.operational_priority  AS \"operational_priorities\"\nGROUP BY 1\nORDER BY  2  DESC",
+    "ResearchDataStatusView": "SELECT \"research_data_status\".status \"research_data_status_view__status\", count(\"research_data_status\".dataset) \"research_data_status_view__row_count\" \nFROM  nyc_observatory.research_data_status  AS \"research_data_status\"\nGROUP BY 1\nORDER BY  2  DESC"
   },
   "qualification": "Local compilation/SQL generation only; no live Cube deployment or database execution."
 }
