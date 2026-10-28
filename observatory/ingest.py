@@ -355,6 +355,9 @@ def inspect_open_data_sources(db):
         '6ctv-n46c': 'City Council legislation',
         'gsj6-6rwm': 'Agency performance annual',
         'phxt-vb3r': 'Agency performance monthly',
+        'rbed-zzin': 'Mayor Management Report performance indicators',
+        '8r6c-ydwk': 'Monthly indicators',
+        'i8ua-bnkj': 'Monthly performance management reports',
         'xn3r-zk6y': 'Community district boundaries',
     }
     schemas = {}
@@ -373,7 +376,7 @@ def inspect_open_data_sources(db):
                 dates = ', '.join(f'{key}={sample[0].get(key)}' for key in
                                   ('intro_date', 'agenda_date', 'passed_date', 'enacted_date'))
                 print(f'::notice title={dataset_id} date example::{dates}')
-            elif dataset_id == 'phxt-vb3r':
+            elif dataset_id in ('phxt-vb3r', 'rbed-zzin', '8r6c-ydwk', 'i8ua-bnkj'):
                 dated_values = [(key, value) for key, value in sample[0].items()
                                 if re.fullmatch(r'(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)_\d{2}', key)]
                 tail = ', '.join(f'{key}={value}' for key, value in dated_values[-12:])
