@@ -1,5 +1,10 @@
 # Cube dashboard build guide
 
+User-confirmed existing draft:
+https://anruow.cubecloud.dev/d/1/dashboard/KNqY4COMgche.
+Inspect and extend this draft rather than creating a duplicate. This document
+defines target acceptance, not the currently observed online layout.
+
 The semantic layer and reviewed PostgreSQL tables are already deployed from the
 `main` branch. This guide defines the native Cube dashboard layout and prevents
 the authoring step from changing metric definitions or presenting a gap as a
@@ -32,7 +37,10 @@ finding.
 Do not add a headline policy count unless reviewed study-period policy records
 exist. An empty table is an honest coverage result.
 
-## Page 2: Neighborhood Equity
+## Page 2: Neighborhood Service Performance
+
+Use this descriptive title while socioeconomic context is missing. The earlier
+name, Neighborhood Equity, exceeds what the available evidence supports.
 
 1. Four KPI cards from `ResearchSummaryView`, filtered to `Period = study`:
    `Requests`, `Eligible 30d`, `Closed 30d`, `Closure 30d Rate`.
@@ -42,6 +50,10 @@ exist. An empty table is an honest coverage result.
    `Period`, measure `Closure 30d Rate`.
 4. Monthly line charts from `ServiceMetricsView`: dimension `Month`, series
    `Period`, measures `Requests` and `Closure 30d Rate`.
+   For seasonal overlap, derive a shared October–September month axis; actual
+   year-month values with Period series do not align matching months. If that
+   transformation is unavailable, show a clearly labeled continuous 24-month
+   trend and do not call it an overlaid seasonal comparison.
 5. Detail table from `ServiceMetricsView`: `Agency`, `Service`, `Borough`,
    `Community District`, `Period`, `Requests`, `Eligible 30d`, `Closed 30d`,
    `Closure 30d Rate`.

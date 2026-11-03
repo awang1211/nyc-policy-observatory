@@ -16,4 +16,7 @@ Validated metric rows: 162,130.
 - 311 reports measure reported demand, not all public service need or unique incidents.
 - Closure is an administrative event and does not prove that a problem was resolved.
 - Priority rows are descriptive screening flags, not causal findings or agency rankings.
-- Socioeconomic context and study-period policy implementation evidence are not yet available.
+- Socioeconomic context is not yet available.
+- Policy implementation evidence is out of scope for this project; see the
+  [NYCuriosity Obligations Tracker](https://data.nycuriosity.com/civic_reference/legislation_implementation_tracker/)
+  or the NYC Mayor's Management Report for that layer.

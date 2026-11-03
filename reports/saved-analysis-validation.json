@@ -1,0 +1,450 @@
+{
+  "passed": true,
+  "source": "reports/current-analysis.json",
+  "source_sha256": "a053250f8ad4d605c983a9ef997958261de69bc3bfef23df174e3b0c13d8526c",
+  "qualification": "Saved aggregate consistency only. No raw requests, live Neon, source completeness or Cube UI were revalidated.",
+  "findings": {
+    "total_requests": 7559591,
+    "request_increase": 368211,
+    "request_change_percent": 10.24034329989516,
+    "closure_change_percentage_points": -0.6541876617781939
+  },
+  "checks": [
+    {
+      "check": "exactly two unique overall periods",
+      "passed": true
+    },
+    {
+      "check": "baseline: borough unique coverage",
+      "passed": true
+    },
+    {
+      "check": "baseline: borough requests reconciles",
+      "passed": true
+    },
+    {
+      "check": "baseline: borough eligible_30d reconciles",
+      "passed": true
+    },
+    {
+      "check": "baseline: borough closed_30d reconciles",
+      "passed": true
+    },
+    {
+      "check": "baseline: monthly unique coverage",
+      "passed": true
+    },
+    {
+      "check": "baseline: monthly requests reconciles",
+      "passed": true
+    },
+    {
+      "check": "baseline: monthly eligible_30d reconciles",
+      "passed": true
+    },
+    {
+      "check": "baseline: monthly closed_30d reconciles",
+      "passed": true
+    },
+    {
+      "check": "baseline: exact monthly window",
+      "passed": true
+    },
+    {
+      "check": "study: borough unique coverage",
+      "passed": true
+    },
+    {
+      "check": "study: borough requests reconciles",
+      "passed": true
+    },
+    {
+      "check": "study: borough eligible_30d reconciles",
+      "passed": true
+    },
+    {
+      "check": "study: borough closed_30d reconciles",
+      "passed": true
+    },
+    {
+      "check": "study: monthly unique coverage",
+      "passed": true
+    },
+    {
+      "check": "study: monthly requests reconciles",
+      "passed": true
+    },
+    {
+      "check": "study: monthly eligible_30d reconciles",
+      "passed": true
+    },
+    {
+      "check": "study: monthly closed_30d reconciles",
+      "passed": true
+    },
+    {
+      "check": "study: exact monthly window",
+      "passed": true
+    },
+    {
+      "check": "overall[0]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "overall[1]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "borough[0]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "borough[1]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "borough[2]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "borough[3]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "borough[4]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "borough[5]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "borough[6]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "borough[7]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "borough[8]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "borough[9]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "borough[10]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "borough[11]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "monthly[0]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "monthly[1]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "monthly[2]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "monthly[3]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "monthly[4]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "monthly[5]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "monthly[6]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "monthly[7]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "monthly[8]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "monthly[9]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "monthly[10]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "monthly[11]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "monthly[12]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "monthly[13]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "monthly[14]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "monthly[15]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "monthly[16]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "monthly[17]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "monthly[18]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "monthly[19]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "monthly[20]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "monthly[21]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "monthly[22]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "monthly[23]: counts and weighted rate",
+      "passed": true
+    },
+    {
+      "check": "50 unique priority combinations",
+      "passed": true
+    },
+    {
+      "check": "priority[0]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[1]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[2]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[3]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[4]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[5]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[6]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[7]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[8]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[9]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[10]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[11]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[12]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[13]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[14]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[15]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[16]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[17]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[18]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[19]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[20]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[21]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[22]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[23]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[24]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[25]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[26]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[27]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[28]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[29]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[30]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[31]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[32]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[33]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[34]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[35]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[36]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[37]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[38]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[39]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[40]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[41]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[42]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[43]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[44]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[45]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[46]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[47]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[48]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "priority[49]: maturity and arithmetic",
+      "passed": true
+    },
+    {
+      "check": "saved priority ordering",
+      "passed": true
+    }
+  ]
+}
