@@ -4,29 +4,34 @@
 
 Study interval `[2025-10-01, 2026-10-01)`; seasonal baseline `[2024-10-01, 2025-10-01)`, New York civil time. A selected study month compares to the same month one year earlier. Fix an analysis cutoff (this build: 27 October 2026 midnight New York time) separately from retrieval time. Current mutable 311 rows are not historical snapshots.
 
-Units: unique 311 request; canonical municipal initiative; agency × complaint type × community district × calendar month for operational cells. Community districts are administrative neighborhoods, not NTAs, tracts or ZIPs. Unspecified and unknown assignments remain visible. Profile their shares before district comparisons.
+Units: unique 311 request; agency × complaint type × community district × calendar month for operational cells. Community districts are administrative neighborhoods, not NTAs, tracts or ZIPs. Unspecified and unknown assignments remain visible. Profile their shares before district comparisons.
 
-## RQ1: policy responsiveness and implementation
+## Policy/legislative implementation evidence: out of scope
 
-Include municipal initiatives with at least one announcement, enactment or verified delivery event during the study year, including initiatives originating earlier. Cover housing, transportation, sanitation, health, environment, education, public safety, economic security, government access and parks/culture. The taxonomy is an intake aid, not observed coverage.
+This project previously attempted to build its own policy-evidence registry
+(formerly "RQ1"): reviewing Council laws/bills, Mayor announcements, budget
+commitments and agency delivery reports, and staging them into `policies.csv`
+and `policy_service_links.csv` for import. That attempt is retired. The
+accessible Council Open Data asset ends 27 February 2025 (before the study
+year) and automated Mayor/agency publication retrieval is blocked, so the
+in-house pipeline could never clear its own coverage bar.
 
-Review independent source strata: Council laws/bills/history/event items; Mayor announcements/executive orders; adopted budget/capital commitments; agency launch/delivery reports; MMR/PMMR and program performance publications. Introduction-only discovery misses older bills adopted during the year; the event-year connector supplies additional candidates. The news crawler is bounded and always marks coverage incomplete. The accessible Council Open Data asset ends on 27 February 2025, before the study year, while automated Mayor/agency publication retrieval remains blocked. RQ1 is therefore reported as incomplete rather than treated as a zero-policy year.
+Rather than keep investing in that registry, this project points to sources
+that already do it rigorously: the
+[NYCuriosity Obligations Tracker](https://data.nycuriosity.com/civic_reference/legislation_implementation_tracker/)
+reads enacted local-law text directly from NYC Legistar and extracts
+agency-level obligations and deadlines with mechanically-verified quotations,
+updated monthly and covering 2014–present (so it does not share the Council
+Open Data lag). The
+[NYC Mayor's Management Report](https://www.nyc.gov/site/operations/reports/mmr.page)
+covers official agency performance reporting. Connecting either of those
+sources to this project's 311/operational layer, for a single well-chosen
+case, is a possible future direction, not a current deliverable. The staging
+contracts (`data/inputs/policies.csv`, `policy_service_links.csv`) and the
+`discover-policies`/`import-policies` CLI commands remain in the repository as
+reference code, unused in the current scope.
 
-Maintain `coverage_review.csv` by stratum, domain, agency and study month: searched URLs, retrieval outcome, pagination, earliest/latest publication dates, candidate/included counts, duplicate groups, exclusions, gaps and reviewer. Prefer breadth across these strata to isolated case studies. Unsearched or inaccessible domains are **not covered**, not zero-policy domains. Candidate count does not establish inventory completeness.
-
-Canonicalize aliases to stable `policy_id` values. A bill, mayoral announcement and agency launch can be evidence for one initiative. Document whether an omnibus package or its separately actionable components are the counted units; do not count both. Exact IDs deduplicate automatically; similar titles require review. Preserve exact official URL, substantive quotation, event date, reviewer and response hash for each event. The importer checks quotation presence, but **reviewers must verify meaning, dates and factual sufficiency**. PDF-only sources currently require an official text alternative; OCR cannot silently pass.
-
-| Stage | Required evidence | Does not establish |
-|---|---|---|
-| Announced | Dated official commitment or program announcement | Authorization, spending or delivery |
-| Enacted | Official enacted law/order or adopted authority | Service delivery or outcomes |
-| Implementation verified | Official record explicitly documenting a delivered milestone or operating service | Completion of all milestones, effectiveness or equitable reach |
-
-Status is the highest evidenced stage before study end. Implementation date is the earliest verified delivery milestone in the evidence set; retain all events. Do not infer action dates from crawl modification times. Missing implementation dates are censored/unknown, not zero-lag or failed policies. Stage distribution, missing-date shares and source coverage precede any implementation lag analysis. The initial dashboard does not estimate survival-adjusted implementation delays.
-
-Responsiveness is **descriptive documented alignment**. Link initiatives to exact agency/service labels with a reviewed rationale. Compare linked demand/performance and preserve unmapped needs/policies. Deduplicate service cells within each initiative. Different initiatives may share service groups, so linked demand cannot be summed across policies. Topical overlap and later metric changes do not identify policy effects.
-
-## RQ2: metrics
+## Metrics
 
 Interpret floating 311 timestamps in `America/New_York`, convert to UTC, and calculate elapsed hours. Daylight-saving days are not always 24 elapsed hours.
 
@@ -62,4 +67,4 @@ Archive URL, UTC retrieval time and SHA-256 for each response. Validate Socrata 
 
 Independent SQL reconciles request counts, denominators, closed-within-30-day, invalid closures and unresolved counts to metric cells. Known synthetic boundary fixtures separately verify software behavior. After real retrieval, additionally assess source freshness, missingness, invalid timestamps, outlier durations, geographic coverage and category drift. Empty-data checks verify structure only. Policy registry completeness and source review are independent gates from 311 completion.
 
-No causal effects are estimated. Confounding, reporting access, concurrent initiatives, source revisions and service mix limit interpretation. RQ2 descriptive findings use a complete, monthly reconciled 311 production load and independent aggregate checks. RQ1 conclusions still require a complete study-year policy source review. Socioeconomic equity conclusions require geography-compatible denominators and uncertainty information that are not currently loaded.
+No causal effects are estimated. Confounding, reporting access, concurrent initiatives, source revisions and service mix limit interpretation. The descriptive findings use a complete, monthly reconciled 311 production load and independent aggregate checks. Socioeconomic equity conclusions require geography-compatible denominators and uncertainty information that are not currently loaded. Policy implementation evidence is out of scope for this project (see above); any future linkage to it would still need its own study-year source review before supporting a responsiveness claim.

@@ -1,0 +1,271 @@
+{
+  "checked_on_client_date": "2026-11-01",
+  "source": "GitHub REST via connected GitHub tool",
+  "qualification": "Run and step statuses inspected; artifacts, live database and Cube UI not inspected.",
+  "runs": [
+    {
+      "id": 40741460325,
+      "name": "Publish Cube models",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-28T18:03:02Z",
+      "url": "https://github.com/awang1211/nyc-policy-observatory/actions/runs/40741460325",
+      "sha": "57b840eec83c29923b986173175406fc45a4acc6"
+    },
+    {
+      "id": 40741460163,
+      "name": "Load policy and context data",
+      "status": "completed",
+      "conclusion": "failure",
+      "created_at": "2026-10-28T18:03:02Z",
+      "url": "https://github.com/awang1211/nyc-policy-observatory/actions/runs/40741460163",
+      "sha": "57b840eec83c29923b986173175406fc45a4acc6"
+    },
+    {
+      "id": 40741460156,
+      "name": "Validate project",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-28T18:03:02Z",
+      "url": "https://github.com/awang1211/nyc-policy-observatory/actions/runs/40741460156",
+      "sha": "57b840eec83c29923b986173175406fc45a4acc6"
+    },
+    {
+      "id": 40741460079,
+      "name": "Load service data",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-28T18:03:02Z",
+      "url": "https://github.com/awang1211/nyc-policy-observatory/actions/runs/40741460079",
+      "sha": "57b840eec83c29923b986173175406fc45a4acc6"
+    },
+    {
+      "id": 40741460038,
+      "name": "Analyze research data",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-28T18:03:02Z",
+      "url": "https://github.com/awang1211/nyc-policy-observatory/actions/runs/40741460038",
+      "sha": "57b840eec83c29923b986173175406fc45a4acc6"
+    }
+  ],
+  "jobs": [
+    {
+      "run_id": 40741460079,
+      "jobs": [
+        {
+          "name": "load-production-data",
+          "conclusion": "success",
+          "steps": [
+            {
+              "name": "Set up job",
+              "conclusion": "success"
+            },
+            {
+              "name": "Check out repository",
+              "conclusion": "success"
+            },
+            {
+              "name": "Set up Python",
+              "conclusion": "success"
+            },
+            {
+              "name": "Install project",
+              "conclusion": "success"
+            },
+            {
+              "name": "Confirm database secret exists",
+              "conclusion": "success"
+            },
+            {
+              "name": "Initialize evidence database",
+              "conclusion": "success"
+            },
+            {
+              "name": "Load official ACS borough context",
+              "conclusion": "success"
+            },
+            {
+              "name": "Load complete official 311 baseline and study periods",
+              "conclusion": "success"
+            },
+            {
+              "name": "Discover official Council introductions",
+              "conclusion": "success"
+            },
+            {
+              "name": "Discover official Council events",
+              "conclusion": "success"
+            },
+            {
+              "name": "Build complete metric snapshot",
+              "conclusion": "success"
+            },
+            {
+              "name": "Validate calculations and provenance",
+              "conclusion": "success"
+            },
+            {
+              "name": "Publish validated derived tables to Neon",
+              "conclusion": "success"
+            },
+            {
+              "name": "Summarize production source coverage",
+              "conclusion": "success"
+            },
+            {
+              "name": "Preserve validation and aggregate outputs",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Set up Python",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Check out repository",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "conclusion": "success"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "run_id": 40741460038,
+      "jobs": [
+        {
+          "name": "analyze-current-data",
+          "conclusion": "success",
+          "steps": [
+            {
+              "name": "Set up job",
+              "conclusion": "success"
+            },
+            {
+              "name": "Check out repository",
+              "conclusion": "success"
+            },
+            {
+              "name": "Set up Python",
+              "conclusion": "success"
+            },
+            {
+              "name": "Install project",
+              "conclusion": "success"
+            },
+            {
+              "name": "Analyze validated 311 metrics",
+              "conclusion": "success"
+            },
+            {
+              "name": "Save reviewed analysis in repository",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Set up Python",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Check out repository",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "conclusion": "success"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "run_id": 40741460163,
+      "jobs": [
+        {
+          "name": "load-policy-sources",
+          "conclusion": "failure",
+          "steps": [
+            {
+              "name": "Set up job",
+              "conclusion": "success"
+            },
+            {
+              "name": "Check out repository",
+              "conclusion": "success"
+            },
+            {
+              "name": "Set up Python",
+              "conclusion": "success"
+            },
+            {
+              "name": "Install project",
+              "conclusion": "success"
+            },
+            {
+              "name": "Initialize evidence database",
+              "conclusion": "success"
+            },
+            {
+              "name": "Load official ACS borough context",
+              "conclusion": "success"
+            },
+            {
+              "name": "Find accessible official NYC Open Data sources",
+              "conclusion": "success"
+            },
+            {
+              "name": "Inspect selected official data fields",
+              "conclusion": "success"
+            },
+            {
+              "name": "Load selected official Council and performance data",
+              "conclusion": "success"
+            },
+            {
+              "name": "Confirm selected datasets contain real records",
+              "conclusion": "failure"
+            },
+            {
+              "name": "Discover official NYC agency publications",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Discover official Council introductions",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Discover official Council events",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Publish source artifacts and policy candidates to Neon",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Summarize official source coverage",
+              "conclusion": "success"
+            },
+            {
+              "name": "Preserve accessible source catalog",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Set up Python",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Post Check out repository",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "conclusion": "success"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

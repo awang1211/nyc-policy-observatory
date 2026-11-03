@@ -1,5 +1,13 @@
 # Official source catalog
 
+Status clarification, 1 November 2026: the table below is the original acquisition
+catalog, not current evidence status. The 311 acquisition, validation and Neon
+publication steps succeeded in GitHub run `40741460079` on 28 October; saved
+analysis contains 7,559,591 requests across both periods. See `data-status.md`
+and `reports/workflow-evidence.json`. The ACS step's success alone does not
+establish accepted records; policy coverage remains incomplete. Original probe
+failures below should not be read as proof that 311 remains inaccessible.
+
 These are acquisition targets, **not retrieved/verified evidence citations**. Initial probes were denied by the proxy on 27 October 2026. Individual policy citations require source retrieval and review.
 
 | Source | Official entry point | Intended evidence / status |

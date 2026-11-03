@@ -1,6 +1,56 @@
 # Current progress
 
-Updated 28 October 2026.
+Updated 3 November 2026 (New York).
+
+## Scope decision: RQ1 retired
+
+As of 3 November 2026, the project drops the in-house policy-implementation
+registry (formerly "RQ1") as an active research question. Reason: the
+accessible Council Open Data asset ends February 2025 and automated Mayor/agency
+retrieval is blocked, so the in-house pipeline could not clear its own coverage
+bar; meanwhile [NYCuriosity's Obligations Tracker](https://data.nycuriosity.com/civic_reference/legislation_implementation_tracker/)
+already does this well and is current through November 2026. The project now
+scopes itself to the 311 demand/closure monitoring and investigation-screening
+layer (formerly "RQ2"), and points to NYCuriosity/NYC DMMR for policy evidence
+rather than rebuilding it. A near-term driver: the project's author is in
+contact with NYCuriosity's author (Tal Roded) about a possible collaboration
+connecting the two layers, and needs a demo-ready state urgently for that
+conversation. See `docs/data-status.md` and `docs/methodology.md` for the
+updated scope language, and the one-pager materials prepared for this meeting.
+
+## Resumed delivery
+
+The user confirms a native Cube dashboard draft exists at
+https://anruow.cubecloud.dev/d/1/dashboard/KNqY4COMgche. Its pages, controls and
+live query results have not yet been inspected in this session: no connected
+browser/Cube management tool is available. Earlier statements below about page
+creation are superseded by this draft status.
+
+Completed this session:
+
+- Read GitHub run and job statuses: latest service load, production validation,
+  Neon publication, analysis and model compilation succeeded on 28 October.
+- Saved run/step evidence in `reports/workflow-evidence.json`; latest policy
+  workflow failed at its real-record gate and skipped publication.
+- Independently reconciled saved result arithmetic: 109/109 checks passed.
+  This checks aggregate consistency, not raw/source/live completeness.
+- Reran 12 Python tests and the frontend test command successfully.
+- Added a three-day roadmap, Chinese Cube platform guide and demo script.
+
+Remaining acceptance gates:
+
+1. Inspect existing Cube draft and reconcile live metrics and filters.
+2. Retrieve production validation artifact contents; the checked-in
+   `reports/validation.json` contains zero rows and proves structure only.
+3. Resolve midnight versus 18:20 analysis cutoff discrepancy between methods
+   and production workflow using actual production provenance.
+4. Review policy cases and geography-compatible context without claiming full
+   registry coverage or causal effects.
+5. Rehearse and preserve an access-tested demo/export backup.
+
+See `delivery-roadmap.md`, `cube-platform-guide.zh.md` and `workflow-demo.zh.md`.
+
+## Previous delivery record (28 October)
 
 | Work | Status |
 |---|---|
@@ -10,14 +60,15 @@ Updated 28 October 2026.
 | Cube semantic models and query views | Complete through Git deployment |
 | Neighborhood Equity analysis | Complete; native Cube page layout remains |
 | Operational Priorities analysis | Complete; 50 leads published; native page remains |
-| Policy Responsiveness registry | Incomplete because official study-period sources remain unavailable |
+| Policy Responsiveness registry | Retired from project scope (3 Nov 2026); point to NYCuriosity/DMMR instead of rebuilding |
 | Methods, dictionary and executive brief | Complete and updated |
 
 ## Current stage
 
-The project is in native Cube dashboard authoring. No further 311 collection is
-needed for the current study. Use `docs/cube-dashboard-guide.md` to build and
-accept the three pages from the deployed query views.
+The project is in native Cube dashboard completion and acceptance. A draft now
+exists. No additional 311 collection is planned unless acceptance identifies
+a material problem. Use `docs/cube-dashboard-guide.md` to complete and accept
+the pages from the deployed query views.
 
 ## Formal workflows
 

@@ -1,7 +1,19 @@
 # NYC Policy Implementation Observatory
 ## Executive brief
 
-Study: October 2025–September 2026. Seasonal baseline: October 2024–September 2025. Prepared 28 October 2026.
+Study: October 2025–September 2026. Seasonal baseline: October 2024–September 2025. Updated 3 November 2026.
+
+### Scope
+
+This project monitors NYC 311 service demand and administrative closure
+performance, and screens for agency-service-district combinations worth a
+closer look. It does not track or verify policy/legislative implementation
+itself. For that layer, see the
+[NYCuriosity Obligations Tracker](https://data.nycuriosity.com/civic_reference/legislation_implementation_tracker/)
+(enacted local laws mapped to agency obligations, updated monthly) or the
+[NYC Mayor's Management Report](https://www.nyc.gov/site/operations/reports/mmr.page).
+An earlier version of this brief treated policy-implementation tracking as a
+primary research question; that scope is retired here.
 
 ### What the available evidence shows
 
@@ -20,14 +32,16 @@ each with at least 30 mature requests in both periods. Several DOB boiler cells
 show large declines, but classification or workflow changes must be checked before
 interpreting them as operational deterioration.
 
-### What cannot yet be answered
+### What this project does not answer
 
-RQ1 cannot be answered comprehensively. The accessible Council Open Data asset ends
-on 27 February 2025, before the study year, and automated Mayor/agency publication
-retrieval is blocked. No complete source-verified study-year policy registry or
-implementation evidence set is available. The observatory therefore reports these
-as missing evidence and does not infer implementation from announcements, topical
-similarity or later 311 changes.
+Policy and legislative implementation evidence is out of scope for this
+project's own pipeline. An earlier attempt to build an in-house registry
+stalled because the accessible Council Open Data asset ends 27 February 2025
+(before the study year) and automated Mayor/agency publication retrieval is
+blocked. Rather than keep investing in that registry, the project points to
+external sources that already cover it well (NYCuriosity, DMMR) and treats
+connecting those sources to the 311/operational layer below as a possible
+future collaboration, not a current deliverable.
 
 Socioeconomic context is also incomplete. Community-district population, poverty
 and income denominators have not been accepted into the production model. Current
@@ -38,14 +52,16 @@ described as a full socioeconomic equity assessment.
 
 ## Operational use and next release
 
-### Three dashboard pages
+### Dashboard pages
 
-**Neighborhood Equity** will show baseline/study totals, monthly trends and borough
-comparisons. **Operational Priorities** will provide the 50-row investigation queue
-with agency, service, district, volume and closure-rate change. **Policy
-Responsiveness** will expose verified policy evidence when available and currently
-shows explicit coverage gaps, preventing an incomplete registry from appearing
-complete.
+**Neighborhood Equity** shows baseline/study totals, monthly trends and borough
+comparisons. **Operational Priorities** provides the 50-row investigation queue
+with agency, service, district, volume and closure-rate change. These two pages
+are this project's current scope. A third page, **Policy Responsiveness**, is a
+holdover from the retired policy-registry attempt; it honestly shows an empty
+table rather than fabricate coverage, but it is being dropped from the active
+demo rotation or repointed to NYCuriosity/DMMR rather than presented as an
+in-house capability.
 
 ### Controls on interpretation
 
@@ -59,6 +75,8 @@ probability is supplied.
 
 The complete 311 data, analysis tables and Cube semantic models are deployed to
 Neon/Cube. The next release step is native Cube Dashboard authoring and visual
-reconciliation against the independent totals. Policy and socioeconomic extensions
-will be added only when official coverage and geography are verified; they do not
-block publication of the qualified RQ2 dashboard.
+reconciliation against the independent totals. A socioeconomic extension would be
+added only if official geography-compatible denominators are verified. Policy
+implementation evidence is not planned as an in-house extension; if pursued, it
+would take the form of linking to an external source such as NYCuriosity rather
+than rebuilding one.
