@@ -2,7 +2,7 @@
 
 以本轮开始为 Day 1，目标是 72 小时内形成可展示、可复现、可追溯的项目。状态更新：2026-11-01（纽约时间）。这不是后台自动执行日程；后续工作在本聊天继续推进。
 
-**2026-11-03 范围变更**：政策证据模块（原 RQ1，下表"Day 2 并行"行）已从项目范围中移除。原因：可访问的 Council Open Data 只到 2025年2月，Mayor/agency 官网抓取被屏蔽，自建登记册过不了自己的覆盖门槛；而 [NYCuriosity 的 Obligations Tracker](https://data.nycuriosity.com/civic_reference/legislation_implementation_tracker/) 已经把这件事做得很扎实，且更新到 2026年11月。项目收窄为纯 311 需求/结案监测 + 调查线索筛选（原 RQ2），政策证据改为指向 NYCuriosity / NYC DMMR，不再自建。当务之急：作者已联系上 NYCuriosity 作者 Tal Roded，对方对合作感兴趣，需要尽快准备好可演示的材料（dashboard + one-pager）。下表"Day 2 并行"一行按此作废。
+**2026-11-03 范围变更**：政策证据模块（原 RQ1，下表"Day 2 并行"行）已从项目范围中移除。原因：可访问的 Council Open Data 只到 2025年2月，Mayor/agency 官网抓取被屏蔽，自建登记册过不了自己的覆盖门槛。项目收窄为纯 311 需求/结案监测 + 调查线索筛选（原 RQ2），政策证据层（policy evidence layer）暂为 pending，可参考政府公开数据（NYC Legistar、NYC Mayor's Management Report）。下表"Day 2 并行"一行按此作废。
 
 ## 完成标准
 

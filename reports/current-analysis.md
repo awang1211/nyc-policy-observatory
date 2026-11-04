@@ -17,6 +17,5 @@ Validated metric rows: 162,130.
 - Closure is an administrative event and does not prove that a problem was resolved.
 - Priority rows are descriptive screening flags, not causal findings or agency rankings.
 - Socioeconomic context is not yet available.
-- Policy implementation evidence is out of scope for this project; see the
-  [NYCuriosity Obligations Tracker](https://data.nycuriosity.com/civic_reference/legislation_implementation_tracker/)
-  or the NYC Mayor's Management Report for that layer.
+- The policy evidence layer is pending. Public government sources such as NYC
+  Legistar and the NYC Mayor's Management Report are the reference points for that layer.
