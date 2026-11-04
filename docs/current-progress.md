@@ -8,15 +8,11 @@ As of 3 November 2026, the project drops the in-house policy-implementation
 registry (formerly "RQ1") as an active research question. Reason: the
 accessible Council Open Data asset ends February 2025 and automated Mayor/agency
 retrieval is blocked, so the in-house pipeline could not clear its own coverage
-bar; meanwhile [NYCuriosity's Obligations Tracker](https://data.nycuriosity.com/civic_reference/legislation_implementation_tracker/)
-already does this well and is current through November 2026. The project now
+bar. The project now
 scopes itself to the 311 demand/closure monitoring and investigation-screening
-layer (formerly "RQ2"), and points to NYCuriosity/NYC DMMR for policy evidence
-rather than rebuilding it. A near-term driver: the project's author is in
-contact with NYCuriosity's author (Tal Roded) about a possible collaboration
-connecting the two layers, and needs a demo-ready state urgently for that
-conversation. See `docs/data-status.md` and `docs/methodology.md` for the
-updated scope language, and the one-pager materials prepared for this meeting.
+layer (formerly "RQ2"). The policy evidence layer is pending; public government
+sources (NYC Legistar, NYC Mayor's Management Report) are its reference points.
+See `docs/data-status.md` and `docs/methodology.md` for the updated scope language.
 
 ## Resumed delivery
 
@@ -60,7 +56,7 @@ See `delivery-roadmap.md`, `cube-platform-guide.zh.md` and `workflow-demo.zh.md`
 | Cube semantic models and query views | Complete through Git deployment |
 | Neighborhood Equity analysis | Complete; native Cube page layout remains |
 | Operational Priorities analysis | Complete; 50 leads published; native page remains |
-| Policy Responsiveness registry | Retired from project scope (3 Nov 2026); point to NYCuriosity/DMMR instead of rebuilding |
+| Policy Responsiveness registry | Retired from project scope (3 Nov 2026); policy evidence layer pending |
 | Methods, dictionary and executive brief | Complete and updated |
 
 ## Current stage

@@ -1,5 +1,13 @@
 # Methodology
 
+## Research questions
+
+1. **Did New Yorkers ask for more help, and did the city keep up?** Compared with the year before, how many 311 requests came in, and what share were closed within 30 days?
+2. **Where should we look more closely?** Which types of requests, in which neighborhoods, saw the biggest change in how quickly they were closed?
+
+The screening queue for question 2 is an investigation aid, not a finding of
+agency failure or policy effect.
+
 ## Population, time and geography
 
 Study interval `[2025-10-01, 2026-10-01)`; seasonal baseline `[2024-10-01, 2025-10-01)`, New York civil time. A selected study month compares to the same month one year earlier. Fix an analysis cutoff (this build: 27 October 2026 midnight New York time) separately from retrieval time. Current mutable 311 rows are not historical snapshots.
@@ -16,15 +24,11 @@ accessible Council Open Data asset ends 27 February 2025 (before the study
 year) and automated Mayor/agency publication retrieval is blocked, so the
 in-house pipeline could never clear its own coverage bar.
 
-Rather than keep investing in that registry, this project points to sources
-that already do it rigorously: the
-[NYCuriosity Obligations Tracker](https://data.nycuriosity.com/civic_reference/legislation_implementation_tracker/)
-reads enacted local-law text directly from NYC Legistar and extracts
-agency-level obligations and deadlines with mechanically-verified quotations,
-updated monthly and covering 2014–present (so it does not share the Council
-Open Data lag). The
-[NYC Mayor's Management Report](https://www.nyc.gov/site/operations/reports/mmr.page)
-covers official agency performance reporting. Connecting either of those
+The policy evidence layer is therefore pending. Relevant public government
+sources include [NYC Legistar](https://legistar.council.nyc.gov/), which publishes
+enacted local-law text, and the
+[NYC Mayor's Management Report](https://www.nyc.gov/site/operations/reports/mmr.page),
+which covers official agency performance reporting. Connecting either of those
 sources to this project's 311/operational layer, for a single well-chosen
 case, is a possible future direction, not a current deliverable. The staging
 contracts (`data/inputs/policies.csv`, `policy_service_links.csv`) and the

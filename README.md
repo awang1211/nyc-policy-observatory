@@ -1,76 +1,83 @@
 # NYC Policy Implementation Observatory
 
-**Study:** October 2025–September 2026.  
-**Seasonal baseline:** October 2024–September 2025.
+**A monitoring and screening tool for NYC 311 service data: where did demand change, where did response slow down, and what deserves a closer look?**
 
-**Research question**: How did NYC 311 service demand and administrative closure
-performance differ across boroughs, agencies, services and community districts
-between the study year and the seasonal baseline, and which agency–service–district
-combinations merit a closer, manual investigation?
+> **Status: work in progress.** The data pipeline and analysis are working. The public dashboard and follow-up checks are still being built.
 
-This project is a descriptive **monitoring and investigation-screening tool** for
-NYC 311 service data. It does not itself track or verify city policy/legislative
-implementation. For that layer, see external sources such as the
-[NYCuriosity Obligations Tracker](https://data.nycuriosity.com/civic_reference/legislation_implementation_tracker/)
-(enacted local laws mapped to agency obligations and deadlines, updated monthly)
-and the [NYC Mayor's Management Report](https://www.nyc.gov/site/operations/reports/mmr.page)
-(official agency performance reporting). A prior, broader version of this project
-attempted to build its own policy-evidence registry (formerly "RQ1"); that attempt
-is retired in favor of pointing to sources that already do it well, and possible
-collaboration to connect the two layers.
+## Why this project
 
-## Delivery status
+NYC 311 receives millions of service requests a year. The data is open, but it is hard to see where things are changing. This project compares two full years of 311 requests across boroughs, agencies, services and community districts. Then it flags the specific combinations that changed the most, so a person can investigate them.
 
-Current delivery notes (1 November 2026, New York): the user has an existing
-[Cube dashboard draft](https://anruow.cubecloud.dev/d/1/dashboard/KNqY4COMgche).
-Its live layout and filters still require inspection; earlier notes that native
-pages do not exist are superseded. Start with the
-[three-day roadmap](docs/delivery-roadmap.md),
-[Cube platform guide](docs/cube-platform-guide.zh.md), and
-[end-to-end demonstration](docs/workflow-demo.zh.md).
-Recorded GitHub run/step evidence is in `reports/workflow-evidence.json`.
-`reports/validation.json` is an older empty-data structural check, not production
-validation evidence. Run `python3 scripts/check_saved_analysis.py` to reconcile
-the saved aggregate results; this does not revalidate raw data or live Cube.
+**Research questions**
 
-This repository now contains a validated 24-month NYC 311 pipeline, PostgreSQL
-publication, independent analysis, fourteen Cube cubes/views, three interactive
-local dashboard pages, tests, methodology, dictionary, source catalog and an
-executive brief. Cube Cloud is connected to GitHub and Neon, and the deployed
-semantic layer can query the complete 311 baseline and study periods.
+1. **Did New Yorkers ask for more help, and did the city keep up?** Compared with the year before, how many 311 requests came in, and what share were closed within 30 days?
+2. **Where should we look more closely?** Which types of requests, in which neighborhoods, saw the biggest change in how quickly they were closed?
 
-The project has a source-backed descriptive result: 3,595,690 baseline requests and
-3,963,901 study-period requests, with the weighted 30-day administrative closure
-rate moving from 91.0% to 90.4%. Fifty agency-service-district combinations are
-retained as investigation leads, ranked by volume and change in closure rate. These
-are descriptive screening flags, not findings of agency failure, need, or policy
-effect. Policy and socioeconomic evidence remain out of scope for this repository's
-own pipeline; they are displayed as a coverage gap in the "Policy Responsiveness"
-Cube page rather than filled with estimates, pending a decision on whether to
-retire that page or repoint it to an external source.
+The study year is October 2025–September 2026. The comparison year (baseline) is October 2024–September 2025. Neighborhoods are measured as NYC's 59 community districts.
 
-## Run locally
+## What I found so far
+
+- **Demand grew, performance held.** Requests rose about 10%, from 3.60M to 3.96M. The citywide 30-day closure rate barely moved, from 91.0% to 90.4%.
+- **50 investigation leads.** These are agency × service × community-district combinations with at least 30 requests in both years, ranked by volume and by change in closure rate.
+- **41 of the 50 leads are the same issue: Department of Buildings (DOB) boiler complaints.** Across 41 districts in the Bronx, Brooklyn, Manhattan and Queens, the share closed within 30 days fell from 97% to 37%.
+
+![30-day closure rate: DOB boiler complaints in 41 districts fell from 97% to 37%, while citywide stayed near 91%](docs/img/boiler-closure-chart.png)
+
+**How to read this:** A drop this large, and this uniform across boroughs, may reflect a change in process or classification rather than a breakdown in service. Checking that is the next step.
+
+## What this does *not* claim
+
+- **311 measures reported demand,** not all need. It also does not count unique incidents.
+- **"Closed" is an administrative status.** It does not prove a problem was fixed, and an open request does not prove it was ignored.
+- **The 50 leads are screening flags.** They are not findings of agency failure, rankings, or evidence of policy effects.
+- **The policy evidence layer is pending.** This project does not yet link 311 patterns to specific policies or laws. Relevant public government sources include [NYC Legistar](https://legistar.council.nyc.gov/) (local laws) and the [NYC Mayor's Management Report](https://www.nyc.gov/site/operations/reports/mmr.page) (agency performance).
+
+## How it's built
+
+- **Data:** [NYC Open Data 311 Service Requests](https://data.cityofnewyork.us/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9), 24 months (about 7.6M requests)
+- **Pipeline:** Python. Paginated ingestion with monthly source-to-database reconciliation and independent metric validation.
+- **Storage:** PostgreSQL (Neon)
+- **Semantic layer and dashboard:** Cube
+- **Automation:** GitHub Actions
+- **Testing:** unit tests for 30-day boundaries, daylight saving, weighted rates and edge cases
+
+See the [methodology](docs/methodology.md), the [data dictionary](docs/data-dictionary.md) and the [executive brief](docs/executive-brief.md).
+
+## Next steps
+
+1. **Check the boiler pattern:** look for changes in DOB complaint classification or closure workflow before interpreting the drop.
+2. **Add neighborhood context:** link American Community Survey (ACS) data at the community-district level.
+3. **Publish the dashboard** for public viewing.
+
+Feedback is welcome, especially from people who work with NYC government data. Please open an issue or reach out.
+
+---
+
+## For developers
+
+Current delivery notes are in [docs/current-progress.md](docs/current-progress.md).
+
+### Run locally
 
 Python 3.11+; Node 24 for frontend tests. Core execution uses Python's standard library; no package installation is necessary from this checkout.
 
 ```bash
-cd /workspace/nyc-policy-observatory
 python3 -m observatory.cli init
 python3 -m observatory.cli export --as-of 2026-10-27T00:00:00-04:00
 python3 -m observatory.cli serve --port 8000
 ```
 
-Use the existing checkout: cloud tasks are already isolated; no worktree is needed. `.env.example` documents secure process bindings; the app does not automatically load `.env`.
+`.env.example` documents secure process bindings; the app does not automatically load `.env`.
 
-## Populate after source access is enabled
+### Populate after source access is enabled
 
 The `ingest-311` and `ingest-acs` commands are the active pipeline for this
 project's scope (311 demand/performance monitoring). The `discover-policies`,
 `discover-events`, `discover-news` and `import-policies`/`import-links` commands
 below are retained code for the retired policy-registry attempt; they are not
-part of the current research question and do not need to run. Use
-[NYCuriosity](https://data.nycuriosity.com/civic_reference/legislation_implementation_tracker/)
-or the NYC Mayor's Management Report instead for policy/implementation evidence.
+part of the current research questions and do not need to run. The policy evidence layer is pending;
+public government sources such as NYC Legistar and the NYC Mayor's Management
+Report are the reference points for that layer.
 
 ```bash
 python3 scripts/probe_access.py
@@ -96,7 +103,7 @@ with a research result. Formal analysis uses the complete production load. Store
 direct Neon connection string in the repository Actions secret
 `NYC_DATABASE_URL`; workflows map it to `DATABASE_URL`. Never commit it.
 
-## Cube deployment
+### Cube deployment
 
 See [deployment and feature inspection](docs/cube-deployment.md). Cube reads the
 files under `model/cubes/` from the repository root. Reviewed analysis tables
@@ -112,18 +119,18 @@ their own outcomes and do not conceal or block the required 311 validation path.
 Configure the exact `CUBE_API_URL` and a query token as `CUBE_API_TOKEN`, run `inspect-cube`, restart the server, then select **Cube REST**. Tokens stay server-side. The server rejects Cube metric counts that do not reconcile to the local evidence export. Registry/provenance still comes from that export and is labeled accordingly. A query token does not grant Cloud management permissions.
 
 The local three-page application is separate from native Cube Dashboard objects.
-The semantic models required for the three native pages are deployed according
-to prior delivery records; a native dashboard draft also exists per the user.
+The semantic models required for the three native pages are deployed; a native
+Cube dashboard draft exists.
 Of the three pages, **Neighborhood Equity** and **Operational Priorities** are
 the project's current scope. **Policy Responsiveness** reflects the retired
 policy-registry attempt and currently shows an honest coverage gap (no rows);
 pending a decision, it should either be dropped from the demo rotation or
-relabeled to point at NYCuriosity/DMMR instead of implying in-house coverage.
+relabeled as a pending policy evidence layer instead of implying in-house coverage.
 Use the
 [Cube dashboard build guide](docs/cube-dashboard-guide.md) for the exact native
 page fields, filters, caveats and acceptance totals.
 
-## Verify
+### Verify
 
 ```bash
 python3 -m unittest discover -s tests -v
@@ -133,7 +140,7 @@ python3 -m observatory.cli validate --as-of 2026-10-27T00:00:00-04:00
 
 Tests cover independent expected counts, 30-day boundaries, daylight saving, matched maturity, weighted rates, future/invalid closures, request upserts, policy evidence deduplication, quotation verification, ACS county grain and filter calculations. Validation independently reconciles SQL request grain to metric cells, hashes and foreign keys. Empty-data validation is explicitly **structural only**, not research validation.
 
-## Structure
+### Structure
 
 All repository directory and file names use English ASCII names. Documentation content may be Chinese.
 
