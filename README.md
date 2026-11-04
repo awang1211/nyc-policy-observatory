@@ -2,7 +2,7 @@
 
 **A monitoring and screening tool for NYC 311 service data: where did demand change, where did response slow down, and what deserves a closer look?**
 
-> **Status: Work in progress.** The data pipeline and analysis are working. The public dashboard and follow-up checks are still being built.
+> **Status: Work in progress.** The data pipeline and analysis are working. The public dashboard and follow-up checks are still being built.  
 > **Project Overview PDF**: https://drive.google.com/file/d/1aEHD7lb2dmx6iu3G0ufC9EGHlJ4nIWfY/view?usp=sharing (updated on Nov 4, 2026)
 
 ## Why this project
